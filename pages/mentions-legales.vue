@@ -7,7 +7,7 @@
     />
 
     <SectionBlock
-      eyebrow="Informations legales"
+      eyebrow="Informations légales"
       title="Mentions legales"
       description="Remplacez les contenus ci-dessous par les informations reelles du client avant la mise en ligne."
     >
