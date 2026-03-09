@@ -1,115 +1,104 @@
-# Agent.md – Template de site vitrine Nuxt
+# AGENTS.md
 
-## Objectif du dépôt
+## 1. Objectif
 
-Ce dépôt sert de **template de base pour créer rapidement des sites vitrines** pour des clients.
+Maintenir ce dépôt comme template Nuxt de site vitrine simple, statique, réutilisable et rapide à déployer.
 
-Il contient une structure Nuxt prête à l’emploi, une configuration stable et des composants réutilisables.
-L’objectif est de produire des sites **simples, rapides, maintenables et faciles à déployer**.
+Produire des modifications minimales, cohérentes avec l’existant et faciles à reprendre sur un futur projet client.
 
-Pour chaque nouveau client, il faut partir de ce template afin de garder une architecture cohérente, un environnement maîtrisé et un temps de mise en place réduit.
+## 2. Principes généraux
 
-Chaque projet client doit ensuite avoir **son propre dépôt Git**.
+- Agis avec sobriété. Change uniquement ce qui est nécessaire.
+- Privilégie la génération statique avec Nuxt. Ne bascule pas vers une architecture serveur.
+- Préfère la simplicité, la lisibilité et la performance à l’abstraction.
+- Respecte les conventions déjà visibles avant d’en introduire une nouvelle.
+- Utilise Tailwind CSS avant d’ajouter du CSS personnalisé.
+- Garde les contenus, composants et pages faciles à réutiliser pour d’autres clients.
 
----
+## 3. Lecture obligatoire avant modification
 
-## Structure du projet
+Lis les fichiers concernés avant toute modification.
 
-Le projet suit les conventions de Nuxt.
+Lis au minimum :
 
-* `app.vue` : point d’entrée principal de l’application.
-* `pages/` : pages du site. Chaque fichier correspond à une route.
-* `layouts/` : layouts partagés entre les pages.
-* `components/` : composants réutilisables (header, footer, sections).
-* `public/` : fichiers statiques (images, favicon, robots.txt, sitemap…).
-* `assets/` : styles ou ressources utilisées dans le build.
-* `nuxt.config.ts` : configuration principale du projet.
-* `package.json` : dépendances et scripts npm.
+- `package.json` pour les scripts et dépendances
+- `nuxt.config.ts` pour le mode statique, le runtime config et les règles globales
+- `app.vue` et `layouts/default.vue` pour la structure d’application
+- les pages et composants touchés pour reprendre les patterns existants
+- `AGENTS.md` en entier avant de commencer
 
-Chaque site client est une **copie de ce template**.
+Ne modifie jamais un fichier que tu n’as pas lu.
 
----
+## 4. Règles de modification
 
-## Commandes de développement
+- Modifie le plus petit nombre de fichiers possible.
+- Réutilise d’abord les composants existants dans `components/`.
+- Conserve les patterns actuels : `script setup`, TypeScript, composants Nuxt simples, classes Tailwind directement dans les templates.
+- Préserve la structure actuelle : `pages/` pour les routes, `layouts/` pour les layouts, `components/` pour les blocs réutilisables, `public/` pour les assets statiques.
+- Maintiens le SEO de base sur chaque page utile : title, description, structure de titres, canonical si le pattern existant s’applique.
+- Si tu ajoutes une nouvelle règle ou convention non visible dans le dépôt, signale explicitement qu’elle est nouvelle.
 
-Utiliser npm.
+## 5. Qualité du code
 
-Installation des dépendances
-`npm install`
+- Supprime le code mort. N’en ajoute jamais.
+- Refuse la complexité inutile, les couches d’abstraction gratuites et les composants trop génériques.
+- Évite les dépendances supplémentaires sauf besoin clair et justifié.
+- Garde des noms explicites et un balisage accessible.
+- Vérifie le responsive mobile, tablette et desktop.
+- Vérifie que le résultat reste compatible avec `npm run generate`.
+- Corrige les fautes visibles dans les contenus modifiés.
 
-Développement local
-`npm run dev`
+## 6. Cohérence architecturale
 
-Build de production
-`npm run build`
+- Préserve l’orientation actuelle du projet : site vitrine Nuxt 4 avec SSR activé et preset Nitro statique.
+- N’introduis pas de logique backend, d’état global complexe ou de système CMS improvisé.
+- Centralise les métadonnées SEO selon le mécanisme déjà en place, notamment le composant `SeoPage` quand il convient.
+- Préfère des sections réutilisables et composables plutôt que du code dupliqué dans les pages.
+- N’ajoute pas de convention de dossiers nouvelle sans nécessité démontrée.
+- `SuiviClient.md` est requis pour un projet client. S’il est demandé dans ce dépôt dérivé, crée-le et documente les choix techniques, l’hébergement et le déploiement.
 
-Prévisualisation du build
-`npm run preview`
+## 7. Sécurité Git
 
-Génération statique pour l’hébergement
-`npm run generate`
+- Ne crée aucun commit sans demande explicite.
+- Ne fais aucun `git push` sans demande explicite.
+- Ne fais aucun `git push --force` sans demande explicite.
+- Ne réécris pas l’historique sans demande explicite.
+- Ne supprime pas ni ne reviens sur des changements que tu n’as pas produits.
+- Si l’arbre Git contient des modifications inattendues, isole ton travail et n’écrase rien.
 
-Les sites vitrines doivent être **générés en statique** afin d’être compatibles avec les hébergements mutualisés.
+## 8. Sécurité
 
----
+- Ne place aucun secret, mot de passe, token ou accès sensible dans le code, les commits ou la documentation.
+- N’expose pas de données privées dans `public/` ou dans le code client.
+- Vérifie les URLs, emails et métadonnées avant de les publier.
+- N’ajoute pas de script externe, tracker ou dépendance distante sans besoin clair.
 
-## Règles de développement pour l’agent
+## 9. Prise de décision
 
-Lors de modifications du projet, respecter les règles suivantes :
+- Commence par observer l’existant, puis décide.
+- Si plusieurs options sont possibles, choisis la plus simple et la plus locale.
+- Si une demande pousse à casser l’architecture du template, propose une alternative minimale.
+- Si une information manque, n’invente pas un standard de projet. Appuie-toi sur les fichiers présents et signale l’incertitude si nécessaire.
 
-Toujours privilégier **la simplicité et la performance**.
+## 10. Actions interdites
 
-Toujours préférer **la génération statique avec Nuxt** plutôt qu’un serveur Node.
+- Ajouter du code mort, du code spéculatif ou des TODO non demandés.
+- Introduire une dépendance sans justification technique concrète.
+- Refondre l’architecture sans nécessité explicite.
+- Mélanger un changement métier avec des retouches hors sujet.
+- Remplacer les patterns existants par une préférence personnelle.
+- Dégrader le SEO, l’accessibilité, la performance ou la génération statique.
+- Modifier des fichiers non liés juste pour “uniformiser”.
 
-Ne jamais ajouter de dépendances inutiles.
+## 11. Résultat attendu
 
-Favoriser les **composants réutilisables** dans `components/`.
+Le résultat doit être :
 
-Respecter la structure du template et les conventions de Nuxt.
+- court à relire
+- directement exploitable
+- cohérent avec le template existant
+- compatible avec un site vitrine statique Nuxt
+- propre sur mobile et desktop
+- sans régression évidente de SEO, d’accessibilité ou de structure
 
-Utiliser **Tailwind CSS** avant d’écrire du CSS personnalisé.
-
-Optimiser les images et éviter les fichiers lourds.
-
-Toujours vérifier le **responsive** (mobile, tablette, desktop).
-
-Respecter les bonnes pratiques **SEO de base** :
-title, meta description, structure des titres.
-
-Le code doit rester **clair, lisible et facile à maintenir**.
-
----
-
-## Suivi du projet client
-
-Chaque projet client doit contenir un fichier :
-
-`SuiviClient.md`
-
-Ce fichier doit documenter :
-
-* les étapes de développement
-* les choix techniques
-* les dépendances utilisées
-* les informations d’hébergement
-* les instructions de déploiement
-* les accès techniques si nécessaire
-
-Ce document doit permettre une **maintenance facile du projet dans le futur**.
-
----
-
-## Checklist avant réponse de l’agent
-
-Avant de proposer une modification ou une solution :
-
-* vérifier les fautes d’orthographe
-* vérifier la clarté de la réponse
-* vérifier que la réponse est complète
-* vérifier que la réponse est pertinente par rapport à la question
-* tester la solution si possible
-* vérifier que la solution respecte les bonnes pratiques de développement
-* vérifier que la solution est responsive et accessible
-* vérifier que la solution reste compatible avec la génération statique
-
-L’objectif est de fournir **des solutions simples, robustes et adaptées à un site vitrine**.
+Chaque modification doit laisser le dépôt plus clair, pas plus complexe.
