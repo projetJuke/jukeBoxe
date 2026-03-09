@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MSG_FILE="${1}"
+FIRST_LINE="$(head -n 1 "$MSG_FILE" | tr -d '\r')"
+
+# Autoriser commits auto-générés par git
+if [[ "$FIRST_LINE" =~ ^Merge\  ]]; then
+  exit 0
+fi
+
+# Types autorisés (MINUSCULES uniquement)
+# Optionnel: scope => feat(auth) : ...
+REGEX='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9._-]+\))?\ :\ .+'
+
+if [[ ! "$FIRST_LINE" =~ $REGEX ]]; then
+  echo "❌ Message de commit invalide."
+  echo ""
+  echo "➡️ Format attendu : <type>(<scope optionnel>) : <message>"
+  echo "➡️ Types autorisés (minuscules uniquement) :"
+  echo "   build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test"
+  echo ""
+  echo "✅ Exemples :"
+  echo "  feat : add login page"
+  echo "  fix(auth) : prevent null token crash"
+  echo "  docs : update README"
+  echo ""
+  echo "❌ Exemple refusé :"
+  echo "  Feat : add login page"
+  exit 1
+fi
