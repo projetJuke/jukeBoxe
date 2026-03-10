@@ -19,11 +19,6 @@ const testimonials = [
     quote: 'Le site etait en ligne rapidement, avec une structure claire et simple a faire evoluer.',
     name: 'Claire Martin',
     role: 'Consultante independante'
-  },
-  {
-    quote: 'La base etait propre, les sections deja pensees, et les ajustements ont pris tres peu de temps.',
-    name: 'Julien Bernard',
-    role: 'Artisan'
   }
 ]
 
@@ -35,10 +30,6 @@ const faqItems = [
   {
     question: 'Puis-je faire evoluer les sections plus tard ?',
     answer: 'Oui. Les composants sont reutilisables et la structure permet d ajouter ou retirer des blocs sans refaire la page.'
-  },
-  {
-    question: 'Le site est-il adapte au referencement ?',
-    answer: 'Oui. La configuration inclut des meta SEO de base, un composant dedie, un robots.txt et un sitemap de demarrage.'
   }
 ]
 </script>
