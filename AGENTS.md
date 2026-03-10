@@ -2,30 +2,31 @@
 
 ## 1. Objectif
 
-Maintenir ce dépôt comme template Nuxt de site vitrine simple, statique, réutilisable et rapide à déployer.
+Maintiens ce dépôt comme template Nuxt 4 de site vitrine simple, réutilisable et compatible avec la génération statique.
 
-Produire des modifications minimales, cohérentes avec l’existant et faciles à reprendre sur un futur projet client.
+Fais des modifications courtes, locales et faciles à reprendre sur un futur projet client.
 
 ## 2. Principes généraux
 
-- Agis avec sobriété. Change uniquement ce qui est nécessaire.
-- Privilégie la génération statique avec Nuxt. Ne bascule pas vers une architecture serveur.
-- Préfère la simplicité, la lisibilité et la performance à l’abstraction.
-- Respecte les conventions déjà visibles avant d’en introduire une nouvelle.
-- Utilise Tailwind CSS avant d’ajouter du CSS personnalisé.
-- Garde les contenus, composants et pages faciles à réutiliser pour d’autres clients.
+- Change uniquement ce qui est nécessaire.
+- Respecte d’abord les conventions déjà présentes dans le dépôt.
+- Préfère la simplicité, la lisibilité et la performance.
+- Garde une architecture frontend légère. N’ajoute ni logique backend, ni couche métier complexe.
+- Utilise Tailwind CSS avant d’écrire du CSS personnalisé.
+- Conserve des composants et contenus faciles à adapter pour d’autres clients.
 
 ## 3. Lecture obligatoire avant modification
 
-Lis les fichiers concernés avant toute modification.
+Lis toujours les fichiers avant de les modifier.
 
 Lis au minimum :
 
-- `package.json` pour les scripts et dépendances
-- `nuxt.config.ts` pour le mode statique, le runtime config et les règles globales
-- `app.vue` et `layouts/default.vue` pour la structure d’application
-- les pages et composants touchés pour reprendre les patterns existants
-- `AGENTS.md` en entier avant de commencer
+- `AGENTS.md`
+- `package.json`
+- `nuxt.config.ts`
+- `app.vue`
+- `layouts/default.vue`
+- chaque page, composant ou fichier de configuration concerné par ta modification
 
 Ne modifie jamais un fichier que tu n’as pas lu.
 
@@ -33,29 +34,33 @@ Ne modifie jamais un fichier que tu n’as pas lu.
 
 - Modifie le plus petit nombre de fichiers possible.
 - Réutilise d’abord les composants existants dans `components/`.
-- Conserve les patterns actuels : `script setup`, TypeScript, composants Nuxt simples, classes Tailwind directement dans les templates.
-- Préserve la structure actuelle : `pages/` pour les routes, `layouts/` pour les layouts, `components/` pour les blocs réutilisables, `public/` pour les assets statiques.
-- Maintiens le SEO de base sur chaque page utile : title, description, structure de titres, canonical si le pattern existant s’applique.
-- Si tu ajoutes une nouvelle règle ou convention non visible dans le dépôt, signale explicitement qu’elle est nouvelle.
+- Conserve les patterns visibles : `script setup`, TypeScript, composants simples, classes Tailwind directement dans les templates.
+- Préserve la structure actuelle : `pages/`, `components/`, `layouts/`, `public/`.
+- Utilise `SeoPage` pour les métadonnées de page quand le besoin correspond au pattern existant.
+- Réutilise `SectionBlock`, `ContentGrid`, `BaseButton` et les blocs existants avant d’en créer de nouveaux.
+- Garde les contenus simples et locaux à la page quand c’est déjà le cas. N’introduis pas de couche de données ou de CMS improvisé.
+- Passe par `runtimeConfig.public` pour les informations globales déjà centralisées comme le nom du site, l’URL ou l’email de contact.
+- Si tu introduis une convention absente du dépôt, signale explicitement qu’elle est nouvelle.
 
 ## 5. Qualité du code
 
-- Supprime le code mort. N’en ajoute jamais.
-- Refuse la complexité inutile, les couches d’abstraction gratuites et les composants trop génériques.
-- Évite les dépendances supplémentaires sauf besoin clair et justifié.
+- N’ajoute aucun code mort.
+- Supprime le code mort rencontré s’il est dans le périmètre direct de ta modification.
+- Refuse la complexité inutile, les abstractions gratuites et les composants trop génériques.
+- N’ajoute pas de dépendance sans besoin concret.
 - Garde des noms explicites et un balisage accessible.
 - Vérifie le responsive mobile, tablette et desktop.
 - Vérifie que le résultat reste compatible avec `npm run generate`.
-- Corrige les fautes visibles dans les contenus modifiés.
+- Corrige les fautes visibles dans les contenus que tu modifies.
 
 ## 6. Cohérence architecturale
 
-- Préserve l’orientation actuelle du projet : site vitrine Nuxt 4 avec SSR activé et preset Nitro statique.
-- N’introduis pas de logique backend, d’état global complexe ou de système CMS improvisé.
-- Centralise les métadonnées SEO selon le mécanisme déjà en place, notamment le composant `SeoPage` quand il convient.
-- Préfère des sections réutilisables et composables plutôt que du code dupliqué dans les pages.
-- N’ajoute pas de convention de dossiers nouvelle sans nécessité démontrée.
-- `SuiviClient.md` est requis pour un projet client. S’il est demandé dans ce dépôt dérivé, crée-le et documente les choix techniques, l’hébergement et le déploiement.
+- Préserve l’orientation actuelle : Nuxt 4, SSR activé, preset Nitro `static`.
+- Ne bascule pas vers une architecture serveur.
+- Ne remplace pas les métadonnées centralisées par du SEO dispersé page par page sans raison.
+- Préfère des sections composables à la duplication de blocs dans les pages.
+- Ne crée pas de nouveau dossier ou de nouvelle convention de rangement sans nécessité claire.
+- Respecte le niveau de simplicité actuel des composants. N’ajoute pas d’état global complexe.
 
 ## 7. Sécurité Git
 
@@ -63,42 +68,45 @@ Ne modifie jamais un fichier que tu n’as pas lu.
 - Ne fais aucun `git push` sans demande explicite.
 - Ne fais aucun `git push --force` sans demande explicite.
 - Ne réécris pas l’historique sans demande explicite.
-- Ne supprime pas ni ne reviens sur des changements que tu n’as pas produits.
+- Ne supprime pas et ne réécris pas des changements que tu n’as pas produits.
 - Si l’arbre Git contient des modifications inattendues, isole ton travail et n’écrase rien.
 
 ## 8. Sécurité
 
-- Ne place aucun secret, mot de passe, token ou accès sensible dans le code, les commits ou la documentation.
-- N’expose pas de données privées dans `public/` ou dans le code client.
-- Vérifie les URLs, emails et métadonnées avant de les publier.
-- N’ajoute pas de script externe, tracker ou dépendance distante sans besoin clair.
+- N’écris aucun secret, mot de passe, token ou accès sensible dans le code ou la documentation.
+- N’expose aucune donnée privée dans `public/` ou dans le code client.
+- Vérifie les URLs, emails, coordonnées et métadonnées avant publication.
+- N’ajoute aucun script externe, tracker ou ressource distante sans besoin clair.
+- Ne laisse pas en production des contenus manifestement provisoires comme des coordonnées d’exemple ou des mentions légales non remplacées.
 
 ## 9. Prise de décision
 
-- Commence par observer l’existant, puis décide.
-- Si plusieurs options sont possibles, choisis la plus simple et la plus locale.
-- Si une demande pousse à casser l’architecture du template, propose une alternative minimale.
-- Si une information manque, n’invente pas un standard de projet. Appuie-toi sur les fichiers présents et signale l’incertitude si nécessaire.
+- Observe l’existant avant de décider.
+- Choisis l’option la plus simple et la plus locale.
+- Si la demande pousse à casser l’architecture du template, propose une alternative minimale.
+- N’invente pas de standard de projet en l’absence d’indice clair dans le dépôt.
+- En cas d’incertitude, appuie-toi sur les fichiers présents et signale explicitement l’hypothèse retenue.
 
 ## 10. Actions interdites
 
-- Ajouter du code mort, du code spéculatif ou des TODO non demandés.
-- Introduire une dépendance sans justification technique concrète.
+- Ajouter du code mort, spéculatif ou non utilisé.
+- Ajouter des TODO non demandés.
+- Introduire une dépendance sans justification technique précise.
 - Refondre l’architecture sans nécessité explicite.
-- Mélanger un changement métier avec des retouches hors sujet.
-- Remplacer les patterns existants par une préférence personnelle.
-- Dégrader le SEO, l’accessibilité, la performance ou la génération statique.
-- Modifier des fichiers non liés juste pour “uniformiser”.
+- Mélanger un besoin réel avec des retouches hors sujet.
+- Remplacer un pattern existant par une préférence personnelle.
+- Dégrader le SEO, l’accessibilité, la performance ou la compatibilité avec la génération statique.
+- Modifier des fichiers non liés pour uniformiser le style.
 
 ## 11. Résultat attendu
 
 Le résultat doit être :
 
 - court à relire
-- directement exploitable
-- cohérent avec le template existant
-- compatible avec un site vitrine statique Nuxt
+- strict et immédiatement applicable
+- cohérent avec les conventions visibles du dépôt
+- compatible avec un site vitrine Nuxt généré statiquement
 - propre sur mobile et desktop
-- sans régression évidente de SEO, d’accessibilité ou de structure
+- sans régression évidente de structure, de SEO, d’accessibilité ou de performance
 
-Chaque modification doit laisser le dépôt plus clair, pas plus complexe.
+Chaque modification doit rendre le dépôt plus clair, pas plus complexe.
