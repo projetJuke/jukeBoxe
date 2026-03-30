@@ -1,112 +1,171 @@
 # AGENTS.md
 
-## 1. Objectif
+## Objectif
 
-Maintiens ce dépôt comme template Nuxt 4 de site vitrine simple, réutilisable et compatible avec la génération statique.
+Développer Jukebox comme une application web locale, simple et rapide à faire évoluer, destinée à fonctionner sur Raspberry Pi sans dépendre d'un accès réseau côté utilisateur.
 
-Fais des modifications courtes, locales et faciles à reprendre sur un futur projet client.
+L'agent agit comme un développeur fullstack orienté simplicité. Il privilégie les solutions courtes, lisibles et directement exploitables.
 
-## 2. Principes généraux
+## Principes généraux
 
-- Change uniquement ce qui est nécessaire.
-- Respecte d’abord les conventions déjà présentes dans le dépôt.
-- Préfère la simplicité, la lisibilité et la performance.
-- Garde une architecture frontend légère. N’ajoute ni logique backend, ni couche métier complexe.
-- Utilise Tailwind CSS avant d’écrire du CSS personnalisé.
-- Conserve des composants et contenus faciles à adapter pour d’autres clients.
+- Respecter strictement la séparation entre frontend, backend et admin.
+- Garder une seule source de vérité pour la logique métier: le backend.
+- Faire transiter toutes les données par une API JSON.
+- Favoriser des fonctions simples, des fichiers courts et des flux explicites.
+- Optimiser pour un fonctionnement local fiable avant toute autre considération.
 
-## 3. Lecture obligatoire avant modification
+## Lecture obligatoire avant modification
 
-Lis toujours les fichiers avant de les modifier.
+Avant toute modification, lire au minimum:
 
-Lis au minimum :
+- le fichier ciblé
+- les fichiers directement appelés par ce fichier
+- les points d'entrée concernés
+- les routes API ou handlers impactés
 
-- `AGENTS.md`
-- `package.json`
-- `nuxt.config.ts`
-- `app.vue`
-- `layouts/default.vue`
-- chaque page, composant ou fichier de configuration concerné par ta modification
+Ne jamais modifier un fichier en supposant son rôle sans l'avoir lu.
 
-Ne modifie jamais un fichier que tu n’as pas lu.
+## Règles de modification
 
-## 4. Règles de modification
+- Modifier seulement ce qui est nécessaire au besoin demandé.
+- Conserver l'architecture existante si elle reste cohérente avec ces règles.
+- Si une logique métier change, la modifier dans le backend puis adapter le frontend.
+- Si une donnée est utilisée par plusieurs interfaces, la définir une seule fois côté backend.
+- Si un comportement n'a pas sa place dans le frontend, le déplacer vers l'API.
 
-- Modifie le plus petit nombre de fichiers possible.
-- Réutilise d’abord les composants existants dans `components/`.
-- Conserve les patterns visibles : `script setup`, TypeScript, composants simples, classes Tailwind directement dans les templates.
-- Préserve la structure actuelle : `pages/`, `components/`, `layouts/`, `public/`.
-- Utilise `SeoPage` pour les métadonnées de page quand le besoin correspond au pattern existant.
-- Réutilise `SectionBlock`, `ContentGrid`, `BaseButton` et les blocs existants avant d’en créer de nouveaux.
-- Garde les contenus simples et locaux à la page quand c’est déjà le cas. N’introduis pas de couche de données ou de CMS improvisé.
-- Passe par `runtimeConfig.public` pour les informations globales déjà centralisées comme le nom du site, l’URL ou l’email de contact.
-- Si tu introduis une convention absente du dépôt, signale explicitement qu’elle est nouvelle.
+## Qualité du code
 
-## 5. Qualité du code
+- Écrire du PHP simple sans framework et sans couche d'abstraction inutile.
+- Préférer des fonctions claires à des classes introduites par habitude.
+- Retourner du JSON cohérent, avec des structures stables et explicites.
+- Éviter la sur-ingénierie, les patterns décoratifs et les helpers génériques prématurés.
+- Supprimer le code mort, les branches inutiles et les doublons.
 
-- N’ajoute aucun code mort.
-- Supprime le code mort rencontré s’il est dans le périmètre direct de ta modification.
-- Refuse la complexité inutile, les abstractions gratuites et les composants trop génériques.
-- N’ajoute pas de dépendance sans besoin concret.
-- Garde des noms explicites et un balisage accessible.
-- Vérifie le responsive mobile, tablette et desktop.
-- Vérifie que le résultat reste compatible avec `npm run generate`.
-- Corrige les fautes visibles dans les contenus que tu modifies.
+## Cohérence architecturale
 
-## 6. Cohérence architecturale
+Structure cible:
 
-- Préserve l’orientation actuelle : Nuxt 4, SSR activé, preset Nitro `static`.
-- Ne bascule pas vers une architecture serveur.
-- Ne remplace pas les métadonnées centralisées par du SEO dispersé page par page sans raison.
-- Préfère des sections composables à la duplication de blocs dans les pages.
-- Ne crée pas de nouveau dossier ou de nouvelle convention de rangement sans nécessité claire.
-- Respecte le niveau de simplicité actuel des composants. N’ajoute pas d’état global complexe.
+- `frontend/`: interface principale Nuxt pour consulter, sélectionner et lancer la lecture.
+- `backend/public/index.php`: point d'entrée HTTP.
+- `backend/routes/api.php`: définition des routes API.
+- `backend/handlers/*.php`: logique métier et orchestration.
+- `backend/core/db.php`: connexion base de données centralisée.
+- `admin/`: interface d'administration séparée si nécessaire.
 
-## 7. Sécurité Git
+Règles strictes:
 
-- Ne crée aucun commit sans demande explicite.
-- Ne fais aucun `git push` sans demande explicite.
-- Ne fais aucun `git push --force` sans demande explicite.
-- Ne réécris pas l’historique sans demande explicite.
-- Ne supprime pas et ne réécris pas des changements que tu n’as pas produits.
-- Si l’arbre Git contient des modifications inattendues, isole ton travail et n’écrase rien.
+- Ne jamais mélanger rendu frontend et logique backend dans le même fichier.
+- Ne jamais accéder directement à la base depuis Nuxt ou depuis l'admin JS.
+- Ne jamais dupliquer une règle métier entre Nuxt et l'admin.
+- Toute lecture ou écriture métier passe par une route API JSON.
+- L'interface admin suit les mêmes règles d'API que le frontend principal.
 
-## 8. Sécurité
+## Standards de code
 
-- N’écris aucun secret, mot de passe, token ou accès sensible dans le code ou la documentation.
-- N’expose aucune donnée privée dans `public/` ou dans le code client.
-- Vérifie les URLs, emails, coordonnées et métadonnées avant publication.
-- N’ajoute aucun script externe, tracker ou ressource distante sans besoin clair.
-- Ne laisse pas en production des contenus manifestement provisoires comme des coordonnées d’exemple ou des mentions légales non remplacées.
+### PHP
 
-## 9. Prise de décision
+- Utiliser un PHP procédural simple ou des fonctions isolées par responsabilité.
+- Mettre la logique HTTP minimale dans `public/index.php`.
+- Garder `routes/api.php` centré sur le mapping route -> handler.
+- Mettre la logique métier dans `handlers/`.
+- Centraliser la connexion base de données dans `core/db.php`.
 
-- Observe l’existant avant de décider.
-- Choisis l’option la plus simple et la plus locale.
-- Si la demande pousse à casser l’architecture du template, propose une alternative minimale.
-- N’invente pas de standard de projet en l’absence d’indice clair dans le dépôt.
-- En cas d’incertitude, appuie-toi sur les fichiers présents et signale explicitement l’hypothèse retenue.
+### Frontend Nuxt
 
-## 10. Actions interdites
+- Limiter le frontend à l'affichage, à la collecte d'actions utilisateur et aux appels API.
+- Ne pas embarquer de logique métier, de règles d'autorisation ou de règles de planification.
+- Garder les appels réseau explicites et proches des usages.
 
-- Ajouter du code mort, spéculatif ou non utilisé.
-- Ajouter des TODO non demandés.
-- Introduire une dépendance sans justification technique précise.
-- Refondre l’architecture sans nécessité explicite.
-- Mélanger un besoin réel avec des retouches hors sujet.
-- Remplacer un pattern existant par une préférence personnelle.
-- Dégrader le SEO, l’accessibilité, la performance ou la compatibilité avec la génération statique.
-- Modifier des fichiers non liés pour uniformiser le style.
+### JSON
 
-## 11. Résultat attendu
+- Répondre avec `application/json`.
+- Utiliser des clés stables, lisibles et prévisibles.
+- Retourner des erreurs explicites avec un code HTTP adapté quand c'est possible.
 
-Le résultat doit être :
+## Nommage et organisation des fichiers
 
-- court à relire
-- strict et immédiatement applicable
-- cohérent avec les conventions visibles du dépôt
-- compatible avec un site vitrine Nuxt généré statiquement
-- propre sur mobile et desktop
-- sans régression évidente de structure, de SEO, d’accessibilité ou de performance
+- Nommer les routes API avec des noms métier simples et stables.
+- Nommer les handlers selon l'action métier réelle, pas selon la technologie.
+- Utiliser des noms de fichiers explicites: `getPlaylists.php`, `savePlaylist.php`, `getUsagePeriods.php`.
+- Éviter les fichiers fourre-tout du type `utils.php`, `common.php`, `apiHelpers.php` si la responsabilité n'est pas nette.
+- Garder les fichiers frontend alignés sur l'organisation Nuxt existante.
 
-Chaque modification doit rendre le dépôt plus clair, pas plus complexe.
+## Sécurité Git
+
+- Ne jamais faire de commit, push, force-push ou rebase sans demande explicite.
+- Ne jamais réécrire l'historique sans instruction explicite.
+- Ne jamais écraser des changements non liés au besoin traité.
+
+## Sécurité
+
+- Valider toutes les entrées côté backend.
+- Ne jamais faire confiance aux données envoyées par le frontend ou l'admin.
+- Sanitiser les paramètres utilisés dans les requêtes SQL.
+- Utiliser une connexion DB centralisée et des requêtes préparées si une base SQL est en jeu.
+- Vérifier les cas d'erreur simples: paramètres manquants, format invalide, ressource absente.
+- Éviter toute dépendance à un service réseau externe pour une fonctionnalité critique du jukebox.
+
+## Prise de décision
+
+- Choisir la solution la plus simple qui couvre le besoin complet.
+- Refuser d'ajouter une abstraction si elle ne réduit pas un vrai coût actuel.
+- En cas d'hésitation, privilégier:
+  1. clarté
+  2. centralisation backend
+  3. fonctionnement local
+  4. facilité de maintenance
+
+## Actions interdites
+
+- Ajouter un framework PHP.
+- Mettre de la logique métier dans Nuxt, dans le JS admin ou dans des composants UI.
+- Dupliquer les règles métier entre plusieurs interfaces.
+- Introduire des websockets, files de messages, microservices ou caches complexes sans besoin explicite.
+- Créer des couches `service`, `repository`, `manager` ou `factory` par réflexe.
+- Coder "pour plus tard" au lieu de répondre au besoin réel.
+
+## Exemples concrets
+
+### Route API
+
+```php
+// backend/routes/api.php
+$routes['GET']['/api/playlists'] = 'getPlaylists';
+$routes['POST']['/api/playlists'] = 'savePlaylist';
+```
+
+### Handler PHP
+
+```php
+// backend/handlers/getPlaylists.php
+function getPlaylists(PDO $db): void
+{
+    $stmt = $db->query('SELECT id, name FROM playlists ORDER BY name ASC');
+    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    header('Content-Type: application/json');
+    echo json_encode(['playlists' => $items]);
+}
+```
+
+### Appel depuis Nuxt
+
+```ts
+// frontend/pages/index.vue
+const { data, error } = await useFetch('/api/playlists')
+```
+
+Rappel:
+
+- le frontend affiche `data`
+- le backend décide du format, des validations et des règles métier
+- l'admin consomme la même API JSON
+
+## Résultat attendu
+
+Chaque changement produit par l'agent doit:
+
+- respecter la séparation frontend/backend/admin
+- conserver la logique métier dans le backend
+- rester court, lisible et testable manuellement
+- fonctionner en local sur le jukebox sans dépendance externe critique
