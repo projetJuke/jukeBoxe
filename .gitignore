@@ -23,4 +23,5 @@ frontend/.idea
 .env.*
 !.env.example
 
+# Database connection 
 connect.php

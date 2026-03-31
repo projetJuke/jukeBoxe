@@ -1,119 +1,67 @@
-<script setup lang="ts">
-const services = [
-  {
-    title: 'Creation de site vitrine',
-    description: 'Une presence en ligne claire, rapide et pensee pour convertir les visiteurs en prospects.'
-  },
-  {
-    title: 'Refonte et optimisation',
-    description: 'Une structure modernisee, un contenu mieux organise et une navigation simplifiee.'
-  },
-  {
-    title: 'SEO local',
-    description: 'Des bases techniques propres pour aider votre site a etre indexe et trouve plus facilement.'
-  }
-]
-
-const testimonials = [
-  {
-    quote: 'Le site etait en ligne rapidement, avec une structure claire et simple a faire evoluer.',
-    name: 'Claire Martin',
-    role: 'Consultante independante'
-  }
-]
-
-const faqItems = [
-  {
-    question: 'Combien de temps faut-il pour lancer un site vitrine ?',
-    answer: 'Avec cette base, une premiere version peut etre preparee rapidement puis ajustee selon votre contenu et votre identite.'
-  },
-  {
-    question: 'Puis-je faire evoluer les sections plus tard ?',
-    answer: 'Oui. Les composants sont reutilisables et la structure permet d ajouter ou retirer des blocs sans refaire la page.'
-  }
-]
-</script>
-
 <template>
-  <div>
-    <SeoPage
-      title="Accueil"
-      description="Modele de site vitrine Nuxt avec sections essentielles, composants reutilisables et bases SEO preconfigurees."
-      path="/"
+  <div class="relative h-dvh w-full overflow-hidden">
+    <div class="mx-auto flex h-dvh w-full max-w-[1800px] flex-col items-center justify-center gap-4 px-4 py-4 xl:grid xl:grid-cols-[400px_minmax(260px,1fr)_400px] xl:justify-center xl:gap-[clamp(24px,4vw,72px)] xl:px-6 xl:py-6">
+      <PlaylistList />
+      <Vinyl />
+      <Tag />
+    </div>
+    <ChoixMusique
+      v-if="showChoixMusique"
+      :selected-letter="selectedLetter"
+      :selected-number="selectedNumber"
     />
-
-    <SectionBlock
-      id="hero"
-      eyebrow="Template vitrine"
-      title="Une base Nuxt prete a personnaliser pour les sites clients"
-      description="Gagnez du temps avec une page d accueil deja structuree, des composants reutilisables et une configuration SEO de base."
-      variant="hero"
-    >
-      <template #actions>
-        <BaseButton href="#contact">
-          Demander un devis
-        </BaseButton>
-        <BaseButton href="#services" variant="secondary">
-          Voir les sections
-        </BaseButton>
-      </template>
-    </SectionBlock>
-
-    <SectionBlock
-      id="services"
-      eyebrow="Services"
-      title="Des sections typiques deja pretes"
-      description="Cette page couvre les besoins les plus frequents des sites vitrines et peut etre adaptee selon chaque client."
-    >
-      <ContentGrid :columns="3">
-        <ServiceCard
-          v-for="service in services"
-          :key="service.title"
-          :title="service.title"
-          :description="service.description"
-        />
-      </ContentGrid>
-    </SectionBlock>
-
-    <SectionBlock
-      id="about"
-      eyebrow="Presentation"
-      title="Une structure simple pour presenter votre activite"
-      description="Expliquez votre valeur, votre methode et ce qui vous differencie sans repartir de zero a chaque projet."
-      variant="muted"
-    >
-      <ContentGrid :columns="2">
-        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h3 class="text-xl font-semibold text-slate-900">
-            Ce que cette base apporte
-          </h3>
-          <p class="mt-4 text-slate-600">
-            Un design propre, une structure de contenu lisible, des appels a l action visibles et des composants faciles a recomposer.
-          </p>
-        </div>
-        <div class="rounded-3xl border border-slate-200 bg-slate-900 p-8 text-slate-100 shadow-sm">
-          <h3 class="text-xl font-semibold">
-            Pour quels usages ?
-          </h3>
-          <p class="mt-4 text-slate-300">
-            Artisans, independants, cabinets, studios, TPE ou associations qui ont besoin d un site vitrine professionnel et rapide a mettre en ligne.
-          </p>
-        </div>
-      </ContentGrid>
-    </SectionBlock>
-
-    <TestimonialsSection :items="testimonials" />
-
-    <FaqSection :items="faqItems" />
-
-    <SectionBlock
-      id="contact"
-      eyebrow="Contact"
-      title="Un formulaire deja integre"
-      description="Ajoutez votre logique d envoi plus tard. La structure, les champs et le design sont deja en place."
-      variant="muted"
-    >
-      <ContactForm />
-    </SectionBlock>
   </div>
 </template>
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue'
+
+const showChoixMusique = ref(false)
+const selectedLetter = ref('')
+const selectedNumber = ref('')
+const pauseRequest = useState('player-pause-request', () => 0)
+const trackRequestCode = useState('player-track-request-code', () => '')
+const trackRequestId = useState('player-track-request-id', () => 0)
+
+function handleKey(event: KeyboardEvent) {
+  const key = event.key.toUpperCase()
+
+  if (key === 'M') {
+    showChoixMusique.value = !showChoixMusique.value
+    pauseRequest.value += 1
+    if (!showChoixMusique.value) {
+      selectedLetter.value = ''
+      selectedNumber.value = ''
+    }
+    return
+  }
+
+  if (!showChoixMusique.value) {
+    return
+  }
+
+  if (!selectedLetter.value && /^[A-I]$/.test(key)) {
+    selectedLetter.value = key
+    selectedNumber.value = ''
+    return
+  }
+
+  if (selectedLetter.value && /^[1-9]$/.test(key)) {
+    selectedNumber.value = key
+    trackRequestCode.value = `${selectedLetter.value}${key}`
+    trackRequestId.value += 1
+    window.setTimeout(() => {
+      showChoixMusique.value = false
+      selectedLetter.value = ''
+      selectedNumber.value = ''
+    }, 180)
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKey)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKey)
+})
+</script>

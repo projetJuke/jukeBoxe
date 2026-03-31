@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/projetJuke/jukeBoxe/compare/v1.0.0...v1.1.0) (2026-03-31)
+
+
+### Features
+
+* add jukebox playback interface ([d97d77b](https://github.com/projetJuke/jukeBoxe/commit/d97d77bf1e75a7400b98b0c4bd4b5db17c16d445))
+* add track selection overlay ([f83fdd5](https://github.com/projetJuke/jukeBoxe/commit/f83fdd53e0ad1d490ddfd4272b702929a61950db))
+* finalize jukebox player setup ([9788251](https://github.com/projetJuke/jukeBoxe/commit/9788251fc59eb282597bea2eebbc62f1ecd10703))
+
 # 1.0.0 (2026-03-30)
 
 
