@@ -1,9 +1,7 @@
 <template>
-  <div class="min-h-screen bg-white text-slate-900">
-    <SiteHeader />
-    <main>
+  <div class="h-dvh overflow-hidden bg-[url('/images/Fond.png')] bg-cover bg-center bg-no-repeat">
+    <main class="h-dvh overflow-hidden">
       <slot />
     </main>
-    <SiteFooter />
   </div>
 </template>
