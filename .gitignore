@@ -22,3 +22,5 @@ frontend/.idea
 .env
 .env.*
 !.env.example
+
+connect.php
