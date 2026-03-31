@@ -7,6 +7,8 @@ export default defineNuxtConfig({
 
   ssr: true,
 
+  css: ['~/assets/style.css'],
+
   nitro: {
     preset: 'static'
   },

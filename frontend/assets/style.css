@@ -1,0 +1,253 @@
+:root {
+  --juke-bg: #E6CCB2;
+  --juke-1: #EDE0D4;
+  --juke-2: #7F5539;
+  --juke-3: #B08968;
+}
+
+body {
+  background-color: var(--juke-bg);
+  color: var(--juke-2);
+}
+
+.bg-juke-bg {
+  background-color: var(--juke-bg);
+}
+
+.bg-juke-1 {
+  background-color: var(--juke-bg);
+}
+.bg-juke-3 {
+  background-color: var(--juke-1);
+}
+
+.bg-juke-4 {
+  background-color: var(--juke-2);
+}
+
+.bg-juke-6 {
+  background-color: var(--juke-3);
+}
+
+.text-juke-bg {
+  color: var(--juke-bg);
+}
+
+.text-juke-1 {
+  color: var(--juke-bg);
+}
+.text-juke-3 {
+  color: var(--juke-1);
+}
+
+.text-juke-4 {
+  color: var(--juke-2);
+}
+
+.text-juke-6 {
+  color: var(--juke-3);
+}
+
+.border-juke-bg {
+  border-color: var(--juke-bg);
+}
+
+.border-juke-1 {
+  border-color: var(--juke-bg);
+}
+.border-juke-3 {
+  border-color: var(--juke-1);
+}
+
+.border-juke-4 {
+  border-color: var(--juke-2);
+}
+
+.border-juke-6 {
+  border-color: var(--juke-3);
+}
+
+
+@font-face {
+  font-family: 'Arima Madurai';
+  src: url('/fonts/ArimaMadurai-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arima Madurai';
+  src: url('/fonts/ArimaMadurai-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arima Madurai';
+  src: url('/fonts/ArimaMadurai-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arima Madurai';
+  src: url('/fonts/ArimaMadurai-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arima Madurai';
+  src: url('/fonts/ArimaMadurai-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arima Madurai';
+  src: url('/fonts/ArimaMadurai-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arima Madurai';
+  src: url('/fonts/ArimaMadurai-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arima Madurai';
+  src: url('/fonts/ArimaMadurai-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-ExtraLightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-ExtraBoldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+.font-arima {
+  font-family: 'Arima Madurai', serif;
+}
+
+.font-mulish {
+  font-family: 'Mulish', sans-serif;
+}
