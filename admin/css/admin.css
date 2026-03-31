@@ -1,0 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #fff3c2;
+}
+
+.inline_section {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 15px;
+    gap: 15%;
+}
+
+.inline_section section {
+    display: block;
+}
+
+.left {
+    width: 30%;
+}
+
+.right {
+    flex: 1;
+}
+
+.identifier_list {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 20px;
+    padding: 15px;
+    align-items: center;
+}
+
+.title {
+    align-items: center;
+}
+
+.green_box,
+.red_box {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.green_box {
+    background: green;
+}
+
+.red_box {
+    background: red;
+}
