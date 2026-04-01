@@ -12,10 +12,13 @@ function validatePassword($password, $min, $max)
 
 function verifySession()
 {
-    if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-        if ($_SESSION['user']['is_logged'] !== true) {
-            header("Location: index.php");
-            exit();
-        }
+    if (
+        !isset($_SESSION['user']) ||
+        empty($_SESSION['user']) ||
+        !isset($_SESSION['user']['is_logged']) ||
+        $_SESSION['user']['is_logged'] !== true
+    ) {
+        header("Location: ../views/index.php");
+        exit();
     }
 }
