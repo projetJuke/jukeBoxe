@@ -10,7 +10,12 @@ function validatePassword($password, $min, $max)
     return preg_match('/^[\w\d!#%^\-*]{' . $min . ',' . $max . '}$/', $password);
 }
 
-function verifySession()
+function validateInteger($integer)
+{
+    return is_numeric($integer);
+}
+
+function verifySessionStatus()
 {
     if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
         if ($_SESSION['user']['is_logged'] !== true) {
@@ -18,4 +23,9 @@ function verifySession()
             exit();
         }
     }
+}
+
+function validateIdentificationCode($code)
+{
+    return preg_match("/^[ABCDEFGHI][1-9]$/", $code);
 }

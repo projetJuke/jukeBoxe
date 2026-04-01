@@ -38,7 +38,7 @@
                  <div><img src="../images/leaf_01.png"></div>
                  <div><img src="../images/leaf_02.png"></div>
                  <div><img src="../images/leaf_03.png"></div>
-                 <div><img src="../images/leaf_04.png"></div>            
+                 <div><img src="../images/leaf_04.png"></div>
              </div>
          </div>
          <img src="../images/bg.jpg" class="bg">
