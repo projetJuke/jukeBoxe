@@ -1,0 +1,87 @@
+@import url("./theme.css");
+
+.top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.table-container {
+    display: grid;
+    gap: 12px;
+}
+
+.table-header--artists,
+.row--artists {
+    grid-template-columns: minmax(60px, 80px) minmax(0, 1fr) auto;
+}
+
+.table-header--tracks,
+.row--tracks {
+    grid-template-columns: 72px minmax(160px, 1.4fr) minmax(90px, 110px) minmax(90px, 110px) minmax(90px, 110px) auto;
+}
+
+.table-header--playlists,
+.row--playlists {
+    grid-template-columns: 72px minmax(220px, 1fr) auto auto auto;
+}
+
+.cell-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.empty-list {
+    padding: 18px;
+    text-align: center;
+    color: rgba(85, 53, 30, 0.72);
+}
+
+.playlist-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(93, 132, 91, 0.14);
+    border: 1px solid rgba(93, 132, 91, 0.24);
+    color: #476645;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.row--selected {
+    border-color: rgba(93, 132, 91, 0.28);
+    background: linear-gradient(180deg, rgba(241, 249, 238, 0.92), rgba(255, 251, 247, 0.78));
+}
+
+@media (max-width: 860px) {
+    .table-header {
+        display: none;
+    }
+
+    .row,
+    .row--artists,
+    .row--tracks,
+    .row--playlists {
+        grid-template-columns: 1fr;
+    }
+
+    .cell-actions {
+        justify-content: flex-start;
+    }
+}

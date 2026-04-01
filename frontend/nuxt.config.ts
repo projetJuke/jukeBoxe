@@ -7,12 +7,15 @@ export default defineNuxtConfig({
 
   ssr: true,
 
+  css: ['~/assets/style.css'],
+
   nitro: {
     preset: 'static'
   },
 
   runtimeConfig: {
     public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '',
       siteName,
       siteUrl,
       contactEmail: process.env.NUXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com',

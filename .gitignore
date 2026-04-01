@@ -22,3 +22,7 @@ frontend/.idea
 .env
 .env.*
 !.env.example
+
+# Database connection 
+connect.php
+.codex
