@@ -1,7 +1,7 @@
 <?php
 session_start();
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
-    $_SESSION['popup'] = "Access non authorisé";
+    $_SESSION['error'] = "Access non authorisé";
     header("Location: ../views/index.php");
     exit();
 }
@@ -9,14 +9,14 @@ require_once "utilities.php";
 require_once "../../connect.php";
 
 if (!validateInteger($_POST['playlist_id'])) {
-    $_SESSION['popup'] = "Playlist non existante";
+    $_SESSION['error'] = "Playlist non existante";
     header("Location: ../views/dashboard");
     exit();
 }
 
 if (!validateIdentificationCode($_POST['track_code'])) {
-    $_SESSION['popup'] = "Track non trouvée dans la playlist";
-    header("Location: ../views/modifier_playlist?playlist_id=" . $_POST['playlist_id'] . "");
+    $_SESSION['error'] = "Track non trouvée dans la playlist";
+    header("Location: ../views/gestion_playlist?playlist_id=" . $_POST['playlist_id'] . "");
     exit();
 }
 
@@ -36,6 +36,8 @@ try {
     $statement->execute();
 } catch (Exception $e) {
     $e->getMessage();
+    $_SESSION['error'] = "Erreur est parvenu lors de la connection à la base de données";
+    header("Location: ../views/index.php");
     exit();
 }
 
@@ -43,8 +45,8 @@ $row = $statement->fetch() ?? null;
 $statement->closeCursor();
 
 if (!$row) {
-    echo $_SESSION['popup'] = "Morceau pas trouvée dans la playlist.";
-    header("Location: ../views/modifier_playlist.php?playlist_id=" . $playlist_id . "");
+    echo $_SESSION['error'] = "Morceau pas trouvée dans la playlist.";
+    header("Location: ../views/gestion_playlist.php?playlist_id=" . $playlist_id . "");
     exit();
 }
 
@@ -54,13 +56,15 @@ $sql = "DELETE FROM belong
 $statement = $pdo->prepare($sql);
 $statement->bindParam("play_id", $playlist_id);
 $statement->bindParam("track_code", $track_code);
-$statement->execute();
 
 try {
-    header("Location: ../views/modifier_playlist.php?playlist_id=" . $playlist_id . "");
+    $statement->execute();
+    $_SESSION['popup'] = "Morceau supprimer avec succès";
+    header("Location: ../views/gestion_playlist.php?playlist_id=" . $playlist_id . "");
     exit();
 } catch (Exception $e) {
     echo $e->getMessage();
-    header("Location: ../views/modifier_playlist.php?playlist_id=" . $playlist_id . "");
+    $_SESSION['error'] = "Erreur de suppression du morceau";
+    header("Location: ../views/gestion_playlist.php?playlist_id=" . $playlist_id . "");
     exit();
 }
