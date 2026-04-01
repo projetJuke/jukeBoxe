@@ -1,21 +1,21 @@
 <?php
-require "connect.php";
+require "../connect.php";
 
-if (!isset($_POST['artist_id']) || empty($_POST['artist_id'])) {
+if (!isset($_POST['playlist_id']) || empty($_POST['playlist_id'])) {
     die("Erreur : ID manquant");
 }
 
 try {
     $db = new PDO(DNS, LOGIN, PASSWORD, $options);
 
-    $id = (int) $_POST['artist_id'];
+    $id = (int) $_POST['playlist_id'];
 
-    $sql = "DELETE FROM artists WHERE artist_id = :id";
+    $sql = "DELETE FROM playlists WHERE playlist_id = :id";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
-    header("Location: artist.php");
+    header("Location: playliste.php");
     exit();
 } catch (PDOException $e) {
     echo "Erreur : " . $e->getMessage();

@@ -8,13 +8,13 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
 
 <head>
     <meta charset="UTF-8">
-    <title>Artist</title>
+    <title>Sons</title>
     <link rel="stylesheet" href="artist.css">
 </head>
 
 <body>
 
-    <h1>Artist</h1>
+    <h1>sons</h1>
 
     <div class="top-bar">
         <form method="POST" class="search">
@@ -22,16 +22,20 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
             <button type="submit">valider</button>
         </form>
 
-        <a href="ajout_artist.php">
+        <a href="ajout_track.php">
             <button class="add-btn">Ajouter</button>
         </a>
     </div>
 
     <div class="table-container">
+
         <div class="table-header">
-            <span>id</span>
-            <span>ARTIST</span>
-            <span></span>
+            <span>ID</span>
+            <span>Musique</span>
+            <span>Durée</span>
+            <span>Cover</span>
+            <span>Mémoire</span>
+            <span>Action</span>
         </div>
 
         <?php
@@ -39,11 +43,11 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
 
             if (!empty($_POST["name"])) {
                 $baba = '%' . $_POST["name"] . '%';
-                $sql = 'SELECT * FROM artists WHERE name LIKE :recherche';
+                $sql = 'SELECT * FROM tracks WHERE album LIKE :recherche';
                 $statement = $db->prepare($sql);
                 $statement->bindParam(':recherche', $baba);
             } else {
-                $sql = 'SELECT * FROM artists';
+                $sql = 'SELECT * FROM tracks';
                 $statement = $db->prepare($sql);
             }
 
@@ -51,13 +55,19 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
 
             while ($row = $statement->fetch()) {
                 echo '<div class="row">';
-                echo '<span>' . htmlspecialchars($row['artist_id']) . '</span>';
-                echo '<span>' . htmlspecialchars($row['name']) . '</span>';
 
-                echo '<form action="supprimer_artiste.php" method="POST">
-                <input type="hidden" name="artist_id" value="' . $row['artist_id'] . '">
-                <button type="submit" class="delete-btn">Supprimer</button>
-              </form>';
+                echo '<span>' . htmlspecialchars($row['track_id']) . '</span>';
+                echo '<span>' . htmlspecialchars($row['album']) . '</span>';
+                echo '<span>' . htmlspecialchars($row['length']) . '</span>';
+                echo '<span>' . htmlspecialchars($row['id_cover']) . '</span>';
+                echo '<span>' . htmlspecialchars($row['id_music']) . '</span>';
+
+                echo '<span>
+                    <form action="sons_sup.php" method="POST">
+                        <input type="hidden" name="track_id" value="' . htmlspecialchars($row['track_id']) . '">
+                        <button type="submit" class="delete-btn">Supprimer</button>
+                    </form>
+                  </span>';
 
                 echo '</div>';
             }
