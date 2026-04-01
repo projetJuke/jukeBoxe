@@ -38,6 +38,7 @@ const trackRequestCode = useState('player-track-request-code', () => '')
 const trackRequestId = useState('player-track-request-id', () => 0)
 const trackRequestError = useState('player-track-request-error', () => '')
 const trackRequestSuccessId = useState('player-track-request-success-id', () => 0)
+const returnToCarouselRequestId = useState('player-return-to-carousel-request-id', () => 0)
 
 function handleKey(event: KeyboardEvent) {
   const key = event.key.toUpperCase()
@@ -122,6 +123,14 @@ watch(trackRequestSuccessId, (value) => {
   isChoicePopupOpen.value = false
   selectedLetter.value = ''
   selectedNumber.value = ''
+})
+
+watch(returnToCarouselRequestId, (value) => {
+  if (value === 0) {
+    return
+  }
+
+  screenMode.value = 'carrousel'
 })
 
 onMounted(() => {

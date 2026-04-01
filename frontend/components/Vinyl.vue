@@ -52,6 +52,7 @@ const trackRequestId = useState('player-track-request-id', () => 0)
 const trackRequestError = useState('player-track-request-error', () => '')
 const trackRequestSuccessId = useState('player-track-request-success-id', () => 0)
 const isChoicePopupOpen = useState('player-choice-popup-open', () => false)
+const returnToCarouselRequestId = useState('player-return-to-carousel-request-id', () => 0)
 const config = useRuntimeConfig()
 const playlistTracks = useState<Array<{
   album: string
@@ -86,6 +87,7 @@ let audioContext: AudioContext | null = null
 let analyser: AnalyserNode | null = null
 let sourceNode: MediaElementAudioSourceNode | null = null
 let frequencyData: Uint8Array | null = null
+let returnToCarouselTimeoutId: number | null = null
 const currentTrack = useState<PlayerTrack>('player-current-track', () => fallbackTrack)
 const diskStage = ref<'idle' | 'out' | 'in'>('idle')
 const isChangingTrack = ref(false)
@@ -98,6 +100,23 @@ function wait(ms: number) {
 
 function resetWaveform() {
   waveform.value = Array.from({ length: 24 }, () => 6)
+}
+
+function clearReturnToCarouselTimeout() {
+  if (returnToCarouselTimeoutId === null) {
+    return
+  }
+
+  window.clearTimeout(returnToCarouselTimeoutId)
+  returnToCarouselTimeoutId = null
+}
+
+function scheduleReturnToCarousel() {
+  clearReturnToCarouselTimeout()
+  returnToCarouselTimeoutId = window.setTimeout(() => {
+    returnToCarouselRequestId.value += 1
+    returnToCarouselTimeoutId = null
+  }, 60000)
 }
 
 function ensureAudioAnalyser() {
@@ -136,6 +155,7 @@ function handleAudioEnded() {
   targetSpeed = 0
   syncAudioState()
   resetWaveform()
+  scheduleReturnToCarousel()
 }
 
 function handleKey(e: KeyboardEvent) {
@@ -159,6 +179,7 @@ async function togglePlayback() {
   }
 
   try {
+    clearReturnToCarouselTimeout()
     ensureAudioAnalyser()
 
     if (audioContext?.state === 'suspended') {
@@ -345,6 +366,7 @@ watch(trackRequestId, () => {
 })
 
 onUnmounted(() => {
+  clearReturnToCarouselTimeout()
   window.removeEventListener('keydown', handleKey)
 
   if (audio.value) {
