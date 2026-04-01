@@ -1,5 +1,8 @@
 <template>
-  <div class="flex w-full items-center justify-center">
+  <div
+    ref="vinylRoot"
+    class="flex w-full items-center justify-center"
+  >
     <div
       :class="['relative h-[clamp(220px,39.06vw,750px)] w-[clamp(220px,39.06vw,750px)] shrink-0 disk-shell', diskStage]"
     >
@@ -43,6 +46,7 @@ type PlayerTrack = {
 const isPlaying = ref(false)
 const vinylRotation = ref(0)
 const audio = ref<HTMLAudioElement | null>(null)
+const vinylRoot = ref<HTMLElement | null>(null)
 const currentTime = useState('player-current-time', () => 0)
 const duration = useState('player-duration', () => 0)
 const waveform = useState('player-waveform', () => Array.from({ length: 24 }, () => 6))
@@ -158,13 +162,70 @@ function handleAudioEnded() {
   scheduleReturnToCarousel()
 }
 
-function handleKey(e: KeyboardEvent) {
-  if (isChoicePopupOpen.value) {
+function isVisible() {
+  return vinylRoot.value?.getClientRects().length !== 0
+}
+
+function seekBy(seconds: number) {
+  if (!audio.value) {
     return
   }
 
-  if (e.key.toLowerCase() === 'p') {
+  const nextTime = Math.max(0, Math.min(audio.value.currentTime + seconds, Number.isFinite(audio.value.duration) ? audio.value.duration : audio.value.currentTime + seconds))
+  audio.value.currentTime = nextTime
+  syncAudioState()
+}
+
+function restartTrack() {
+  if (!audio.value) {
+    return
+  }
+
+  audio.value.currentTime = 0
+  syncAudioState()
+}
+
+function finishTrack() {
+  if (!audio.value) {
+    return
+  }
+
+  if (Number.isFinite(audio.value.duration) && audio.value.duration > 0) {
+    audio.value.currentTime = audio.value.duration
+  }
+
+  handleAudioEnded()
+}
+
+function handleKey(e: KeyboardEvent) {
+  if (isChoicePopupOpen.value || !isVisible()) {
+    return
+  }
+
+  const key = e.key.toLowerCase()
+
+  if (key === 'p') {
     togglePlayback()
+    return
+  }
+
+  if (key === 't') {
+    seekBy(-10)
+    return
+  }
+
+  if (key === 'y') {
+    seekBy(10)
+    return
+  }
+
+  if (key === 'r') {
+    restartTrack()
+    return
+  }
+
+  if (key === 'u') {
+    finishTrack()
   }
 }
 

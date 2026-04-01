@@ -1,0 +1,23 @@
+@import url("./theme.css");
+
+.form-layout {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+}
+
+.form-card {
+    width: min(100%, 560px);
+}
+
+.form-card form {
+    display: grid;
+    gap: 18px;
+}
+
+.form-status {
+    margin: 0 0 18px;
+    text-align: center;
+    color: var(--admin-text-soft);
+    font-weight: 700;
+}

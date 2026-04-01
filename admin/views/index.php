@@ -45,18 +45,20 @@
          <img src="../images/girl.png" class="girl">
          <img src="../images/trees.png" class="trees">
          <form action="../functions/login.php" method="POST" class="login">
-             <h2> Connexion</h2>
-             <label for="username"> Utilisateur </label>
+             <p class="page-kicker">Jukebox Admin</p>
+             <h2>Connexion</h2>
+             <p class="login-copy">Accédez à l’administration locale du jukebox.</p>
+             <label for="username">Utilisateur</label>
              <div class="inputBox">
 
                  <input type="text" name="username" id="username" min="4" max="20" required>
              </div>
-             <label for="password"> Mot de passe</label>
+             <label for="password">Mot de passe</label>
              <div class="inputBox">
                  <input type="password" name="password" id="password" min="8" max="24" required>
              </div>
              <div class="inputBox">
-                 <input type="submit" value="valider">
+                 <input type="submit" value="Valider">
              </div>
          </form>
      </section>

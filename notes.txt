@@ -1,0 +1,7 @@
+# Messages d'erreurs : 
+
+admin/functions/supprimer_artist.php
+
+# Choses a faire serveur
+
+Augmenter la taille max d'upload (dans php.ini)

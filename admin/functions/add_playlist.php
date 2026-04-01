@@ -1,4 +1,7 @@
 <?php
+session_start();
+require_once "utilities.php";
+requireAdminSession("../views/index.php");
 
 if ($_SERVER['REQUEST_METHOD'] !== "POST"){
     $_SESSION['error'] = "Veuillez acceder a la page a travers un formulaire";
@@ -38,8 +41,8 @@ if ($row) {
     exit();
 }
 
-$sql = "INSERT INTO playlists(label)
-        VALUES (:label)";
+$sql = "INSERT INTO playlists(label, is_selected)
+        VALUES (:label, 0)";
 $statement = $pdo->prepare($sql);
 $statement->bindParam("label", $playlist_name);
 
