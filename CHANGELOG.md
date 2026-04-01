@@ -1,3 +1,16 @@
+# [1.4.0](https://github.com/projetJuke/jukeBoxe/compare/v1.3.0...v1.4.0) (2026-04-01)
+
+
+### Bug Fixes
+
+* fix adjiri branch ([53433b6](https://github.com/projetJuke/jukeBoxe/commit/53433b61de600c402d70268205ace36c6617ea04))
+* style and other ([3137ea4](https://github.com/projetJuke/jukeBoxe/commit/3137ea4e5f853e7829c5cab6531984b5493edbc7))
+
+
+### Features
+
+* ajout , liste et suppression de l'artiste et playlite ([e17bf98](https://github.com/projetJuke/jukeBoxe/commit/e17bf988409a3dc12a272f003b3ed31a9f916960))
+
 # [1.3.0](https://github.com/projetJuke/jukeBoxe/compare/v1.2.0...v1.3.0) (2026-04-01)
 
 
