@@ -18,7 +18,6 @@ if (!isset($_POST['username']) || !isset($_POST['password'])) {
 
 if (!validateUsername($_POST['username'], 4, 20) || !validatePassword($_POST['password'], 8, 24)) {
     $_SESSION['popup'] = "Mot de passe ou utilisateur non conforme";
-    echo "2";
     header("Location: ../views/index.php"); //  Page de login.
     exit();
 }
@@ -58,6 +57,6 @@ if (password_verify($password, $password_hash)) {
     exit();
 } else {
     $_SESSION['popup'] = "Identifiants mauvais";
-    header("Location: index.php"); // page login
+    header("Location: ../views/index.php");
     exit();
 }

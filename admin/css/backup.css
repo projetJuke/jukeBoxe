@@ -1,0 +1,233 @@
+:root {
+    --bg-top: #f4ede2;
+    --bg-bottom: #e9ddcd;
+    --panel: rgba(255, 250, 243, 0.92);
+    --panel-strong: #fffaf3;
+    --border: rgba(120, 80, 53, 0.16);
+    --text: #352018;
+    --muted: #72584c;
+    --accent: #8f2c24;
+    --accent-hover: #6f201b;
+    --secondary: #5f564e;
+    --secondary-hover: #4c443e;
+    --success-bg: #dff3e4;
+    --success-text: #245636;
+    --error-bg: #f7dede;
+    --error-text: #84261f;
+    --shadow: 0 18px 45px rgba(67, 34, 18, 0.10);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    font-family: "Mulish", sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.6), transparent 28%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+}
+
+.backup-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 56px 24px 72px;
+}
+
+.backup-page h1 {
+    margin: 0;
+    font-size: clamp(34px, 5vw, 54px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.backup-intro {
+    max-width: 720px;
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.65;
+}
+
+.backup-panel {
+    margin-top: 24px;
+    padding: 28px;
+    border-radius: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+}
+
+.backup-panel h2 {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: -0.03em;
+}
+
+.backup-button,
+.back-link {
+    display: inline-block;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 10px 20px rgba(143, 44, 36, 0.22);
+}
+
+.backup-button:hover,
+.back-link:hover,
+.restore-button:hover {
+    transform: translateY(-1px);
+}
+
+.back-link {
+    background: var(--secondary);
+    box-shadow: 0 10px 20px rgba(95, 86, 78, 0.18);
+}
+
+.backup-button:hover {
+    background: var(--accent-hover);
+}
+
+.backup-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+.backup-actions form {
+    margin: 0;
+}
+
+.backup-message {
+    margin-top: 22px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    line-height: 1.6;
+    border: 1px solid transparent;
+}
+
+.backup-message.success {
+    background: var(--success-bg);
+    color: var(--success-text);
+    border-color: rgba(36, 86, 54, 0.12);
+}
+
+.backup-message.error {
+    background: var(--error-bg);
+    color: var(--error-text);
+    border-color: rgba(132, 38, 31, 0.12);
+}
+
+.backup-list {
+    list-style: none;
+    margin-top: 16px;
+    padding-left: 0;
+}
+
+.backup-list li+li {
+    margin-top: 10px;
+}
+
+.backup-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    margin-top: 22px;
+}
+
+.backup-card {
+    padding: 20px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, var(--panel-strong) 0%, #f7efe5 100%);
+    border: 1px solid var(--border);
+}
+
+.backup-card h2 {
+    margin-bottom: 10px;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+}
+
+.backup-card p {
+    line-height: 1.5;
+    color: var(--muted);
+    margin: 0;
+}
+
+.backup-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(120, 80, 53, 0.14);
+}
+
+.backup-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.backup-name {
+    overflow-wrap: anywhere;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.restore-button {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 999px;
+    background: var(--secondary);
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.restore-button:hover,
+.back-link:hover {
+    background: var(--secondary-hover);
+}
+
+code {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(143, 44, 36, 0.08);
+    color: var(--accent);
+    font-size: 0.95em;
+}
+
+@media (max-width: 720px) {
+    .backup-page {
+        padding: 40px 16px 56px;
+    }
+
+    .backup-panel {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .backup-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .restore-button,
+    .backup-button,
+    .back-link {
+        width: 100%;
+        text-align: center;
+    }
+}

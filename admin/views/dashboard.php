@@ -41,6 +41,7 @@ requireAdminSession("index.php");
                     <strong>Musiques</strong>
                     <span>Importer les morceaux et suivre leurs fichiers associés.</span>
                 </a>
+                <a class="admin-button" href="backup.php">Sauvegarder la base</a>
             </section>
         </div>
     </main>
