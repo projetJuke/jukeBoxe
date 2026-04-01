@@ -3,10 +3,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ENV_FILE="$SCRIPT_DIR/.env"
-BACKUP_DIR="$SCRIPT_DIR/backups"
-TIMESTAMP="$(date "+%Y-%m-%d")"
-SQL_FILE="$BACKUP_DIR/${DBNAME:-jukebox}-$TIMESTAMP.sql"
-BACKUP_FILE="$BACKUP_DIR/${DBNAME:-jukebox}-$TIMESTAMP.tar.gz"
+TIMESTAMP="$(date "+%Y-%m-%d-%H-%M-%S")"
 
 if [ ! -f "$ENV_FILE" ]; then
   echo "Fichier .env introuvable: $ENV_FILE"
@@ -17,8 +14,12 @@ set -a
 source "$ENV_FILE"
 set +a
 
-if [ -z "$DBNAME" ] || [ -z "$DBUSER" ] || [ -z "$DBPASS" ]; then
-  echo "Variables DBNAME, DBUSER ou DBPASS manquantes dans $ENV_FILE"
+BACKUP_DIR="${BACKUP_DIR:-$(cd "$SCRIPT_DIR/.." && pwd)/backups}"
+SQL_FILE="$BACKUP_DIR/jukebox-db-$TIMESTAMP.sql"
+BACKUP_FILE="$BACKUP_DIR/jukebox-db-$TIMESTAMP.tar.gz"
+
+if [ -z "$DBNAME" ] || [ -z "$DBUSER" ] || [ -z "$DBPASS" ] || [ -z "$DBHOST" ] || [ -z "$BACKUP_DIR" ]; then
+  echo "Variables DBNAME, DBUSER, DBPASS, DBHOST ou BACKUP_DIR manquantes dans $ENV_FILE"
   exit 1
 fi
 
@@ -34,10 +35,10 @@ else
 fi
 
 mkdir -p "$BACKUP_DIR"
-SQL_FILE="$BACKUP_DIR/$DBNAME-$TIMESTAMP.sql"
-BACKUP_FILE="$BACKUP_DIR/$DBNAME-$TIMESTAMP.tar.gz"
+SQL_FILE="$BACKUP_DIR/jukebox-db-$TIMESTAMP.sql"
+BACKUP_FILE="$BACKUP_DIR/jukebox-db-$TIMESTAMP.tar.gz"
 
-"$DUMP_CMD" -u"$DBUSER" -p"$DBPASS" "$DBNAME" > "$SQL_FILE"
+"$DUMP_CMD" -h"$DBHOST" -P"${DBPORT:-3306}" -u"$DBUSER" -p"$DBPASS" "$DBNAME" > "$SQL_FILE"
 tar -czf "$BACKUP_FILE" -C "$BACKUP_DIR" "$(basename "$SQL_FILE")"
 rm -f "$SQL_FILE"
 

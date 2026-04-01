@@ -1,18 +1,36 @@
 <?php
 session_start();
-// require_once "../functions/utilities.php";
-// verifySession();
+require_once "../functions/utilities.php";
+verifySession();
 
-// $message = $_SESSION['backup_message'] ?? null;
-// $messageType = $_SESSION['backup_message_type'] ?? 'info';
-// unset($_SESSION['backup_message'], $_SESSION['backup_message_type']);
+$message = $_SESSION['backup_message'] ?? null;
+$messageType = $_SESSION['backup_message_type'] ?? 'info';
+unset($_SESSION['backup_message'], $_SESSION['backup_message_type']);
 
-// $backupFiles = glob(__DIR__ . '/../scripts/backups/*.tar.gz');
-// if ($backupFiles === false) {
-//     $backupFiles = [];
-// }
+$env = parse_ini_file(__DIR__ . '/../scripts/.env');
+$backupDir = $env['BACKUP_DIR'] ?? (__DIR__ . '/../backups');
+$backupFiles = glob(rtrim($backupDir, '/') . '/*.tar.gz');
+if ($backupFiles === false) {
+    $backupFiles = [];
+}
 
-// rsort($backupFiles);
+rsort($backupFiles);
+
+$dbBackups = [];
+$appBackups = [];
+
+foreach ($backupFiles as $backupFile) {
+    $name = basename($backupFile);
+
+    if (strpos($name, 'jukebox-db-') === 0) {
+        $dbBackups[] = $name;
+        continue;
+    }
+
+    if (strpos($name, 'jukebox-app-') === 0) {
+        $appBackups[] = $name;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -23,88 +41,36 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Backup</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: #f6efe4;
-            color: #44211b;
-            font-family: sans-serif;
-        }
-
-        .backup-page {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 48px 24px;
-        }
-
-        .backup-panel {
-            margin-top: 24px;
-            padding: 24px;
-            border-radius: 16px;
-            background: #fff;
-            box-shadow: 0 12px 30px rgba(68, 33, 27, 0.08);
-        }
-
-        .backup-button,
-        .back-link {
-            display: inline-block;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 999px;
-            background: #8f2c24;
-            color: #fff;
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .back-link {
-            background: #5d524b;
-        }
-
-        .backup-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 16px;
-        }
-
-        .backup-message {
-            margin-top: 16px;
-            padding: 12px 16px;
-            border-radius: 12px;
-        }
-
-        .backup-message.success {
-            background: #dff5e3;
-            color: #1f5c2c;
-        }
-
-        .backup-message.error {
-            background: #f8dede;
-            color: #8c1d18;
-        }
-
-        .backup-list {
-            margin-top: 16px;
-            padding-left: 20px;
-        }
-
-        .backup-list li+li {
-            margin-top: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/backup.css">
 </head>
 
 <body>
     <main class="backup-page">
-        <h1>Sauvegarde de la base MariaDB</h1>
+        <h1>Sauvegardes</h1>
+        <p class="backup-intro">Gère les archives de la base et de l'application depuis une seule page. Les sauvegardes sont stockées dans <code><?= htmlspecialchars($backupDir, ENT_QUOTES, 'UTF-8') ?></code>.</p>
         <div class="backup-panel">
-            <p>Le bouton ci-dessous lance le script <code>admin/scripts/sqldump.sh</code> et crée une archive au format <code>jukebox-AAAA-MM-JJ.tar.gz</code>.</p>
+            <div class="backup-grid">
+                <section class="backup-card">
+                    <h2>Base de données</h2>
+                    <p>Génère une archive <code>jukebox-db-AAAA-MM-JJ-HH-MM-SS.tar.gz</code> à partir de la base MariaDB.</p>
+                    <form action="../functions/run_backup.php" method="POST" class="backup-actions">
+                        <input type="hidden" name="backup_type" value="db">
+                        <button class="backup-button" type="submit">Sauvegarder la base</button>
+                    </form>
+                </section>
+                <section class="backup-card">
+                    <h2>Application</h2>
+                    <p>Génère une archive <code>jukebox-app-AAAA-MM-JJ-HH-MM-SS.tar.gz</code> à partir des fichiers du projet.</p>
+                    <form action="../functions/run_backup.php" method="POST" class="backup-actions">
+                        <input type="hidden" name="backup_type" value="app">
+                        <button class="backup-button" type="submit">Sauvegarder l'application</button>
+                    </form>
+                </section>
+            </div>
             <div class="backup-actions">
                 <form action="../functions/run_backup.php" method="POST">
-                    <button class="backup-button" type="submit">Lancer la sauvegarde</button>
+                    <input type="hidden" name="backup_type" value="all">
+                    <button class="backup-button" type="submit">Lancer les deux sauvegardes</button>
                 </form>
                 <a class="back-link" href="dashboard.php">Retour au dashboard</a>
             </div>
@@ -117,15 +83,42 @@ session_start();
         </div>
 
         <div class="backup-panel">
-            <h2>Dernières archives</h2>
+            <h2>Dernieres archives</h2>
             <?php if (empty($backupFiles)): ?>
-                <p>Aucune sauvegarde trouvée dans <code>admin/scripts/backups</code>.</p>
+                <p>Aucune sauvegarde trouvée dans <code><?= htmlspecialchars($backupDir, ENT_QUOTES, 'UTF-8') ?></code>.</p>
             <?php else: ?>
-                <ul class="backup-list">
-                    <?php foreach ($backupFiles as $backupFile): ?>
-                        <li><?= htmlspecialchars(basename($backupFile), ENT_QUOTES, 'UTF-8') ?></li>
-                    <?php endforeach; ?>
-                </ul>
+                <div class="backup-grid">
+                    <section class="backup-card">
+                        <h2>Archives base</h2>
+                        <?php if (empty($dbBackups)): ?>
+                            <p>Aucune archive de base disponible.</p>
+                        <?php else: ?>
+                            <ul class="backup-list">
+                                <?php foreach ($dbBackups as $backupFile): ?>
+                                    <li class="backup-item">
+                                        <span class="backup-name"><?= htmlspecialchars($backupFile, ENT_QUOTES, 'UTF-8') ?></span>
+                                        <form action="../functions/run_restore_db.php" method="POST">
+                                            <input type="hidden" name="backup_file" value="<?= htmlspecialchars($backupFile, ENT_QUOTES, 'UTF-8') ?>">
+                                            <button class="restore-button" type="submit">Restaurer cette version</button>
+                                        </form>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </section>
+                    <section class="backup-card">
+                        <h2>Archives application</h2>
+                        <?php if (empty($appBackups)): ?>
+                            <p>Aucune archive de l'application disponible.</p>
+                        <?php else: ?>
+                            <ul class="backup-list">
+                                <?php foreach ($appBackups as $backupFile): ?>
+                                    <li><?= htmlspecialchars($backupFile, ENT_QUOTES, 'UTF-8') ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </section>
+                </div>
             <?php endif; ?>
         </div>
     </main>

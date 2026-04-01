@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once "../../connect.php";
-require_once "utilities.php";
+require_once __DIR__ . "/../../connect.php";
+require_once __DIR__ . "/utilities.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
     $_SESSION['popup'] = "Veuillez acceder à travers un formulaire à la page.";
@@ -18,7 +18,6 @@ if (!isset($_POST['username']) || !isset($_POST['password'])) {
 
 if (!validateUsername($_POST['username'], 4, 20) || !validatePassword($_POST['password'], 8, 24)) {
     $_SESSION['popup'] = "Mot de passe ou utilisateur non conforme";
-    echo "2";
     header("Location: ../views/index.php"); //  Page de login.
     exit();
 }
@@ -27,14 +26,14 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 
 $sql = 'SELECT * FROM users WHERE name = :username';
-$statement = $pdo->prepare($sql);
+$statement = $db->prepare($sql);
 $statement->bindParam("username", $username);
 
 try {
     $statement->execute();
 } catch (Exception $e) {
-    echo $e->getMessage();
-    header("Location: ../views/error.php");
+    $_SESSION['popup'] = "Erreur de connexion a la base ou requete invalide";
+    header("Location: ../views/index.php");
     exit();
 }
 
@@ -57,6 +56,6 @@ if (password_verify($password, $password_hash)) {
     exit();
 } else {
     $_SESSION['popup'] = "Identifiants mauvais";
-    header("Location: index.php"); // page login
+    header("Location: ../views/index.php");
     exit();
 }
