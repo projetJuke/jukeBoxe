@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once "../functions/utilities.php";
-verifySession();
+requireAdminSession("index.php");
 
 $message = $_SESSION['backup_message'] ?? null;
 $messageType = $_SESSION['backup_message_type'] ?? 'info';

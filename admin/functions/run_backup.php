@@ -1,8 +1,7 @@
 <?php
 session_start();
-
 require_once "utilities.php";
-verifySession();
+requireAdminSession("../views/index.php");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $_SESSION['backup_message'] = 'Requete invalide pour lancer la sauvegarde.';
