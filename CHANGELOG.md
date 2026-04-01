@@ -1,3 +1,19 @@
+# [1.5.0](https://github.com/projetJuke/jukeBoxe/compare/v1.4.0...v1.5.0) (2026-04-01)
+
+
+### Bug Fixes
+
+* merge script ([2c358cf](https://github.com/projetJuke/jukeBoxe/commit/2c358cfbf522b2e94061315b2319b8858219c409))
+
+
+### Features
+
+* add file backup.sh ([ad84a14](https://github.com/projetJuke/jukeBoxe/commit/ad84a14cf963ca7e80314037006489b3ab296b76))
+* backup and gitignore ([e0cbccc](https://github.com/projetJuke/jukeBoxe/commit/e0cbccc664a5afe48bb2e844ff309314bfe06e53))
+* backup app + db, restore ([caf3292](https://github.com/projetJuke/jukeBoxe/commit/caf329249590c9b584f6c2a351a29b30b82e054f))
+* scripts ([bc89a06](https://github.com/projetJuke/jukeBoxe/commit/bc89a06c2090c937b065cc81c2af6ea45abe5cea))
+* view backup ([56363a4](https://github.com/projetJuke/jukeBoxe/commit/56363a426634c4dba39d241164eaf51b1f1f791c))
+
 # [1.4.0](https://github.com/projetJuke/jukeBoxe/compare/v1.3.0...v1.4.0) (2026-04-01)
 
 
