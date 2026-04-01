@@ -1,6 +1,6 @@
 <?php
-require "../connect.php";
-$db = new PDO(DNS, LOGIN, PASSWORD, $options);
+require "../../connect.php";
+$pdo = new PDO(DNS, LOGIN, PASSWORD, $options);
 ?>
 
 <!DOCTYPE html>
@@ -8,13 +8,13 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
 
 <head>
     <meta charset="UTF-8">
-    <title>Sons</title>
-    <link rel="stylesheet" href="artist.css">
+    <title>Musiques</title>
+    <link rel="stylesheet" href="../css/artist.css">
 </head>
 
 <body>
 
-    <h1>sons</h1>
+    <h1>Musiques</h1>
 
     <div class="top-bar">
         <form method="POST" class="search">
@@ -44,11 +44,11 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
             if (!empty($_POST["name"])) {
                 $baba = '%' . $_POST["name"] . '%';
                 $sql = 'SELECT * FROM tracks WHERE album LIKE :recherche';
-                $statement = $db->prepare($sql);
+                $statement = $pdo->prepare($sql);
                 $statement->bindParam(':recherche', $baba);
             } else {
                 $sql = 'SELECT * FROM tracks';
-                $statement = $db->prepare($sql);
+                $statement = $pdo->prepare($sql);
             }
 
             $statement->execute();

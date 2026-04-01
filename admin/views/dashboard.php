@@ -18,13 +18,13 @@ session_start();
     <h1> Dashboard Administration </h1>
     <section class="navigation">
         <div class="container">
-            <a href="create_playlist.php"><button>Créer une playlist</button> </a>
+            <a href="playlist.php"><button>Gestion des playlists</button> </a>
         </div>
         <div class="container">
-            <a href="modify_playlist.php"><button>Modifier une playlist</button> </a>
+            <a href="artist.php"><button>Gestion des artists</button> </a>
         </div>
         <div class="container">
-
+            <a href="sons.php"><button>Gestion des musiques</button> </a>
         </div>
     </section>
 </body>

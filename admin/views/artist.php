@@ -1,20 +1,18 @@
 <?php
-require "../connect.php";
-$db = new PDO(DNS, LOGIN, PASSWORD, $options);
+require "../../connect.php";
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
-    <title>Artist</title>
-    <link rel="stylesheet" href="artist.css">
+    <title>Artistes</title>
+    <link rel="stylesheet" href="../css/artist.css">
 </head>
 
 <body>
 
-    <h1>Artist</h1>
+    <h1>Artistes</h1>
 
     <div class="top-bar">
         <form method="POST" class="search">
@@ -40,11 +38,11 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
             if (!empty($_POST["name"])) {
                 $baba = '%' . $_POST["name"] . '%';
                 $sql = 'SELECT * FROM artists WHERE name LIKE :recherche';
-                $statement = $db->prepare($sql);
+                $statement = $pdo->prepare($sql);
                 $statement->bindParam(':recherche', $baba);
             } else {
                 $sql = 'SELECT * FROM artists';
-                $statement = $db->prepare($sql);
+                $statement = $pdo->prepare($sql);
             }
 
             $statement->execute();
@@ -54,7 +52,7 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
                 echo '<span>' . htmlspecialchars($row['artist_id']) . '</span>';
                 echo '<span>' . htmlspecialchars($row['name']) . '</span>';
 
-                echo '<form action="supprimer_artiste.php" method="POST">
+                echo '<form action="../functions/supprimer_artiste.php" method="POST">
                 <input type="hidden" name="artist_id" value="' . $row['artist_id'] . '">
                 <button type="submit" class="delete-btn">Supprimer</button>
               </form>';

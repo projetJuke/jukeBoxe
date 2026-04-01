@@ -1,6 +1,5 @@
 <?php
-require "../connect.php";
-$db = new PDO(DNS, LOGIN, PASSWORD, $options);
+require "../../connect.php";
 ?>
 
 <!DOCTYPE html>
@@ -8,13 +7,13 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
 
 <head>
     <meta charset="UTF-8">
-    <title>Artist</title>
-    <link rel="stylesheet" href="artist.css">
+    <title>Playlists</title>
+    <link rel="stylesheet" href="../css/artist.css">
 </head>
 
 <body>
 
-    <h1>Artist</h1>
+    <h1>Playlists</h1>
 
     <div class="top-bar">
         <form method="POST" class="search">
@@ -22,7 +21,7 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
             <button type="submit">valider</button>
         </form>
 
-        <a href="ajout_playliste.php">
+        <a href="ajouter_playlist.php">
             <button class="add-btn">Ajouter</button>
         </a>
     </div>
@@ -40,11 +39,13 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
             if (!empty($_POST["label"])) {
                 $baba = '%' . $_POST["label"] . '%';
                 $sql = 'SELECT * FROM playlists WHERE name LIKE :recherche';
-                $statement = $db->prepare($sql);
+                $statement = $pdo
+                    ->prepare($sql);
                 $statement->bindParam(':recherche', $baba);
             } else {
                 $sql = 'SELECT * FROM playlists';
-                $statement = $db->prepare($sql);
+                $statement = $pdo
+                    ->prepare($sql);
             }
 
             $statement->execute();
@@ -54,7 +55,7 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
                 echo '<span>' . htmlspecialchars($row['playlist_id']) . '</span>';
                 echo '<span>' . htmlspecialchars($row['label']) . '</span>';
 
-                echo '<form action="supprimer_playliste.php" method="POST">
+                echo '<form action="../functions/supprimer_playliste.php" method="POST">
                 <input type="hidden" name="playlist_id" value="' . $row['playlist_id'] . '">
                 <button type="submit" class="delete-btn">Supprimer</button>
               </form>';
@@ -62,7 +63,7 @@ $db = new PDO(DNS, LOGIN, PASSWORD, $options);
                 <input type="hidden" name="artist_id" value="' . $row['playlist_id'] . '">
                 <button type="submit" class="delete-btn">Modifier</button>
               </form>';
-
+                
                 echo '</div>';
             }
         } catch (PDOException $e) {

@@ -1,18 +1,15 @@
 <?php
-require "../connect.php";
+require "../../connect.php";
 
 if (!isset($_POST['track_id']) || empty($_POST['track_id'])) {
     die("Erreur : ID manquant");
 }
 
 try {
-    $db = new PDO(DNS, LOGIN, PASSWORD, $options);
-
     $id = (int) $_POST['track_id'];
 
-    // 🔥 récupérer les DEUX colonnes
     $sql = "SELECT id_music, id_cover FROM tracks WHERE track_id = :id";
-    $stmt = $db->prepare($sql);
+    $stmt = $pdo->prepare($sql);
     $stmt->execute(['id' => $id]);
     $track = $stmt->fetch();
 
@@ -32,12 +29,12 @@ try {
 
         // supprimer relations
         $sql = "DELETE FROM produce WHERE track_id = :id";
-        $stmt = $db->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
 
         //supprimer track
         $sql = "DELETE FROM tracks WHERE track_id = :id";
-        $stmt = $db->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
     }
 
