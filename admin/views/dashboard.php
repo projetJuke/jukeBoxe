@@ -41,6 +41,10 @@ requireAdminSession("index.php");
                     <strong>Musiques</strong>
                     <span>Importer les morceaux et suivre leurs fichiers associés.</span>
                 </a>
+                <a class="nav-card" href="backup.php">
+                    <strong>Backup</strong>
+                    <span>Exécuter les scripts de sauvegarde</span>
+                </a>
             </section>
         </div>
     </main>
