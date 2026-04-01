@@ -1,3 +1,23 @@
+# [1.3.0](https://github.com/projetJuke/jukeBoxe/compare/v1.2.0...v1.3.0) (2026-04-01)
+
+
+### Bug Fixes
+
+* prod ([31b6809](https://github.com/projetJuke/jukeBoxe/commit/31b680920dfc621f16e46d8af7ce8a2c5987f127))
+
+
+### Features
+
+* Administrator CRUD ([7e1049b](https://github.com/projetJuke/jukeBoxe/commit/7e1049b64071cfc06658348c7bb68241e8621397))
+
+# [1.2.0](https://github.com/projetJuke/jukeBoxe/compare/v1.1.0...v1.2.0) (2026-04-01)
+
+
+### Features
+
+* add audio image and fix ([46568a7](https://github.com/projetJuke/jukeBoxe/commit/46568a7b3700749dae3e8299be2dfa5f9fe2af5f))
+* add player and carousel flow ([76a2bda](https://github.com/projetJuke/jukeBoxe/commit/76a2bdac5878bef63e6ec67151998f94b5bb623a))
+
 # [1.1.0](https://github.com/projetJuke/jukeBoxe/compare/v1.0.0...v1.1.0) (2026-03-31)
 
 

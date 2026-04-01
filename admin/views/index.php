@@ -38,11 +38,12 @@
                  <div><img src="../images/leaf_01.png"></div>
                  <div><img src="../images/leaf_02.png"></div>
                  <div><img src="../images/leaf_03.png"></div>
-                 <div><img src="../images/leaf_04.png"></div>            
+                 <div><img src="../images/leaf_04.png"></div>
              </div>
          </div>
          <img src="../images/bg.jpg" class="bg">
          <img src="../images/girl.png" class="girl">
+         <img src="../images/trees.png" class="trees">
          <form action="../functions/login.php" method="POST" class="login">
              <h2> Connexion</h2>
              <label for="username"> Utilisateur </label>
