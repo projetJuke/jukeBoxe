@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once "../functions/utilities.php";
+requireAdminSession("index.php");
 include_once "../functions/get_playlist_data.php";
 ?>
 <!DOCTYPE html>
@@ -13,47 +15,59 @@ include_once "../functions/get_playlist_data.php";
 </head>
 
 <body>
-    <header>
-        <?php if (isset($_SESSION['popup'])): ?>
-            <div class="popup">
-                <p> <?= $_SESSION['popup']; ?> </p>
-                <?php unset($_SESSION['popup']) ?>
-            </div>
-        <?php endif; ?>
-        <?php if(isset ($_SESSION['error'])): ?>
-            <div class="error">
-                <p> <?= $_SESSION['error'] ?> </p>
-                <?php unset($_SESSION['error']) ?>
-            </div>
-        <?php endif; ?>
-    </header>
+    <?php if (isset($_SESSION['popup'])): ?>
+        <div class="popup">
+            <p><?= $_SESSION['popup']; ?></p>
+            <?php unset($_SESSION['popup']) ?>
+        </div>
+    <?php endif; ?>
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="error">
+            <p><?= $_SESSION['error'] ?></p>
+            <?php unset($_SESSION['error']) ?>
+        </div>
+    <?php endif; ?>
 
-    <div class="header-container">
-        <h1 class="title"> Playlist: <?= $playlist_name ?? "" ?> </h1>
-    </div>
+    <main class="admin-page">
+        <div class="admin-shell">
+            <div class="header-container">
+                <header class="page-header">
+                    <div>
+                        <p class="page-kicker">Programmation</p>
+                        <h1 class="title">Playlist: <?= htmlspecialchars($playlist_name ?? "") ?></h1>
+                        <p class="page-subtitle">Cliquez sur un emplacement pour consulter le morceau actuel ou remplir un slot vide.</p>
+                    </div>
+                    <div class="toolbar">
+                        <a href="playlist.php" class="button-secondary">Retour playlists</a>
+                        <a href="../functions/logout.php" class="delete-btn">Déconnecter</a>
+                    </div>
+                </header>
+            </div>
 
-    <div class="inline_section">
-        <section class="left">
-            <div class="identifier_list">
-                <?php foreach ($identifier_list as $identifier): ?>
-                    <?php if (isset($playlist[$identifier])): ?>
-                        <div class="green_box" onclick="showInfoGreen('<?= $identifier ?>')">
-                            <?= $identifier ?>
-                        </div>
-                    <?php else: ?>
-                        <div class="red_box" onclick="showInfoRed('<?= $identifier ?>')">
-                            <?= $identifier ?>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+            <div class="inline_section">
+                <section class="left admin-panel">
+                    <div class="identifier_list">
+                        <?php foreach ($identifier_list as $identifier): ?>
+                            <?php if (isset($playlist[$identifier])): ?>
+                                <div class="green_box" onclick="showInfoGreen('<?= $identifier ?>')">
+                                    <?= $identifier ?>
+                                </div>
+                            <?php else: ?>
+                                <div class="red_box" onclick="showInfoRed('<?= $identifier ?>')">
+                                    <?= $identifier ?>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+                <section class="right admin-panel" id="info_panel">
+                    <div class="empty-state">
+                        <p>Sélectionnez un emplacement pour voir les détails ou ajouter un morceau.</p>
+                    </div>
+                </section>
             </div>
-        </section>
-        <section class="right" id="info_panel">
-            <div class="empty-state">
-                <p>Sélectionnez un emplacement pour voir les détails ou ajouter un morceau.</p>
-            </div>
-        </section>
-    </div>
+        </div>
+    </main>
 </body>
 <script>
     const allData = <?= json_encode($playlist) ?>;
@@ -99,7 +113,7 @@ include_once "../functions/get_playlist_data.php";
             
             <div class="button-group">
                 <button type="submit" class="btn-primary">Ajouter à la playlist</button> 
-                <a href="ajouter_morceau.php" class="btn-secondary"> Créer un nouveau morceau </a>
+                <a href="ajout_track.php" class="btn-secondary"> Créer un nouveau morceau </a>
             </div>
         </form>
     `;

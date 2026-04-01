@@ -1,5 +1,8 @@
 <?php
 session_start();
+require_once "utilities.php";
+requireAdminSession("../views/index.php");
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         require "../../connect.php";

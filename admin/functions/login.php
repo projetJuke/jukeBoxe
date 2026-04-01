@@ -50,6 +50,7 @@ $statement->closeCursor();
 if (password_verify($password, $password_hash)) {
     $_SESSION['user'] = array(
         'is_logged' => true,
+        'is_admin' => true,
         'username' => $username
     );
     $_SESSION['popup'] = "Identifiants bon";

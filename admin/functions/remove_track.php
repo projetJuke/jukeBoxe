@@ -1,11 +1,13 @@
 <?php
 session_start();
+require_once "utilities.php";
+requireAdminSession("../views/index.php");
+
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
     $_SESSION['error'] = "Access non authorisé";
     header("Location: ../views/index.php");
     exit();
 }
-require_once "utilities.php";
 require_once "../../connect.php";
 
 if (!validateInteger($_POST['playlist_id'])) {

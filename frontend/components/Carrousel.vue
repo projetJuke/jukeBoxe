@@ -23,6 +23,7 @@
 
     <div
       v-else
+      ref="carrouselRoot"
       class="carrousel-shell w-full max-w-[1800px]"
     >
       <div class="row-mask">
@@ -74,6 +75,7 @@ const { data, pending, error } = await useFetch<{ tracks?: Track[] }>(apiUrl, {
   server: false
 })
 const tracks = computed(() => data.value?.tracks ?? [])
+const carrouselRoot = ref<HTMLElement | null>(null)
 const isFastScrolling = ref(false)
 const firstRowOffset = ref(0)
 const secondRowOffset = ref(0)
@@ -143,14 +145,26 @@ function animateRows(timestamp: number) {
   animationFrameId = window.requestAnimationFrame(animateRows)
 }
 
+function isVisible() {
+  return carrouselRoot.value?.getClientRects().length !== 0
+}
+
 function handleKeyDown(event: KeyboardEvent) {
-  if (event.key.toUpperCase() === 'T') {
+  if (!isVisible()) {
+    return
+  }
+
+  if (event.key.toUpperCase() === 'Y') {
     isFastScrolling.value = true
   }
 }
 
 function handleKeyUp(event: KeyboardEvent) {
-  if (event.key.toUpperCase() === 'T') {
+  if (!isVisible()) {
+    return
+  }
+
+  if (event.key.toUpperCase() === 'Y') {
     isFastScrolling.value = false
   }
 }

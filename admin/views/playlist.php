@@ -1,4 +1,7 @@
 <?php
+session_start();
+require_once "../functions/utilities.php";
+requireAdminSession("index.php");
 require "../../connect.php";
 ?>
 
@@ -12,67 +15,89 @@ require "../../connect.php";
 </head>
 
 <body>
+    <main class="admin-page">
+        <div class="admin-shell">
+            <header class="page-header">
+                <div>
+                    <p class="page-kicker">Programmation</p>
+                    <h1 class="page-title">Playlists</h1>
+                    <p class="page-subtitle">Créez les playlists puis ouvrez leur grille pour placer les morceaux par code.</p>
+                </div>
+                <div class="toolbar">
+                    <a class="button-secondary" href="dashboard.php">Retour dashboard</a>
+                    <a class="delete-btn" href="../functions/logout.php">Déconnecter</a>
+                </div>
+            </header>
 
-    <h1>Playlists</h1>
+            <section class="table-card">
+                <div class="top-bar">
+                    <form method="POST" class="search">
+                        <label class="visually-hidden" for="playlist-search">Recherche playlist</label>
+                        <input type="text" id="playlist-search" name="label" placeholder="Rechercher une playlist">
+                        <button type="submit" class="button">Valider</button>
+                    </form>
 
-    <div class="top-bar">
-        <form method="POST" class="search">
-            <input type="text" name="name" placeholder="recherche">
-            <button type="submit">valider</button>
-        </form>
+                    <a href="ajouter_playlist.php" class="add-btn">Ajouter une playlist</a>
+                </div>
 
-        <a href="ajouter_playlist.php">
-            <button class="add-btn">Ajouter</button>
-        </a>
-    </div>
+                <div class="table-container">
+                    <div class="table-header table-header--playlists">
+                        <span>ID</span>
+                        <span>Nom</span>
+                        <span>Sélection</span>
+                        <span>Ouvrir</span>
+                        <span>Supprimer</span>
+                    </div>
 
-    <div class="table-container">
-        <div class="table-header">
-            <span>id</span>
-            <span>nom</span>
-            <span></span>
+                    <?php
+                    $hasRows = false;
+                    try {
+                        if (!empty($_POST["label"])) {
+                            $baba = '%' . $_POST["label"] . '%';
+                            $sql = 'SELECT * FROM playlists WHERE label LIKE :recherche';
+                            $statement = $pdo->prepare($sql);
+                            $statement->bindParam(':recherche', $baba);
+                        } else {
+                            $sql = 'SELECT * FROM playlists ORDER BY is_selected DESC, label ASC';
+                            $statement = $pdo->prepare($sql);
+                        }
+
+                        $statement->execute();
+
+                        while ($row = $statement->fetch()) {
+                            $hasRows = true;
+                            $isSelected = isset($row['is_selected']) && (int) $row['is_selected'] === 1;
+                            echo '<div class="row row--playlists' . ($isSelected ? ' row--selected' : '') . '">';
+                            echo '<span>' . htmlspecialchars($row['playlist_id']) . '</span>';
+                            echo '<span class="playlist-label">';
+                            echo '<span>' . htmlspecialchars($row['label']) . '</span>';
+                            if ($isSelected) {
+                                echo '<span class="status-badge">Playlist sélectionnée</span>';
+                            }
+                            echo '</span>';
+                            echo '<form action="../functions/select_playlist.php" method="POST">';
+                            echo '<input type="hidden" name="playlist_id" value="' . htmlspecialchars($row['playlist_id']) . '">';
+                            echo '<button type="submit" class="' . ($isSelected ? 'btn-primary' : 'button-secondary') . '">' . ($isSelected ? 'Sélectionnée' : 'Sélectionner') . '</button>';
+                            echo '</form>';
+                            echo '<a class="button-secondary" href="gestion_playlist.php?playlist_id=' . urlencode((string) $row['playlist_id']) . '">Ouvrir</a>';
+                            echo '<form action="../functions/supprimer_playliste.php" method="POST">';
+                            echo '<input type="hidden" name="playlist_id" value="' . htmlspecialchars($row['playlist_id']) . '">';
+                            echo '<button type="submit" class="delete-btn">Supprimer</button>';
+                            echo '</form>';
+                            echo '</div>';
+                        }
+
+                        if (!$hasRows) {
+                            echo '<p class="empty-list">Aucune playlist trouvée.</p>';
+                        }
+                    } catch (PDOException $e) {
+                        echo '<p class="empty-list">Échec : ' . htmlspecialchars($e->getMessage()) . '</p>';
+                    }
+                    ?>
+                </div>
+            </section>
         </div>
-
-        <?php
-        try {
-
-            if (!empty($_POST["label"])) {
-                $baba = '%' . $_POST["label"] . '%';
-                $sql = 'SELECT * FROM playlists WHERE name LIKE :recherche';
-                $statement = $pdo
-                    ->prepare($sql);
-                $statement->bindParam(':recherche', $baba);
-            } else {
-                $sql = 'SELECT * FROM playlists';
-                $statement = $pdo
-                    ->prepare($sql);
-            }
-
-            $statement->execute();
-
-            while ($row = $statement->fetch()) {
-                echo '<div class="row">';
-                echo '<span>' . htmlspecialchars($row['playlist_id']) . '</span>';
-                echo '<span>' . htmlspecialchars($row['label']) . '</span>';
-
-                echo '<form action="../functions/supprimer_playliste.php" method="POST">
-                <input type="hidden" name="playlist_id" value="' . $row['playlist_id'] . '">
-                <button type="submit" class="delete-btn">Supprimer</button>
-              </form>';
-                echo '<form action="modifier_playliste.php" method="POST">
-                <input type="hidden" name="artist_id" value="' . $row['playlist_id'] . '">
-                <button type="submit" class="delete-btn">Modifier</button>
-              </form>';
-                
-                echo '</div>';
-            }
-        } catch (PDOException $e) {
-            echo 'Échec : ' . $e->getMessage();
-        }
-        ?>
-
-    </div>
-
+    </main>
 </body>
 
 </html>

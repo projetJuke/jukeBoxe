@@ -25,6 +25,20 @@ function verifySessionStatus()
     }
 }
 
+function requireAdminSession($redirectPath = 'index.php')
+{
+    $isLogged = isset($_SESSION['user']['is_logged']) && $_SESSION['user']['is_logged'] === true;
+    $isAdmin = isset($_SESSION['user']['is_admin']) && $_SESSION['user']['is_admin'] === true;
+
+    if ($isLogged && $isAdmin) {
+        return;
+    }
+
+    $_SESSION['popup'] = "Vous devez être connecté et administrateur pour accéder à l'admin.";
+    header("Location: " . $redirectPath);
+    exit();
+}
+
 function validateIdentificationCode($code)
 {
     return preg_match("/^[ABCDEFGHI][1-9]$/", $code);

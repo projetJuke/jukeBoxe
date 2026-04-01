@@ -1,4 +1,7 @@
-<?php 
+<?php
+session_start();
+require_once "utilities.php";
+requireAdminSession("../views/index.php");
 
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
     $_SESSION['error'] = "Veuillez acceder a la page a travers un formulaire";
@@ -12,7 +15,6 @@ if (!isset($_POST['playlist_id']) || empty($_POST['playlist_id']) && !isset($_PO
     exit();
 }
 
-require "utilities.php";
 require "../../connect.php";
 
 if (!validateInteger($_POST['playlist_id'])) {

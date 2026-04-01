@@ -1,4 +1,8 @@
 <?php
+session_start();
+require_once "utilities.php";
+requireAdminSession("../views/index.php");
+
 require "../../connect.php";
 
 if (!isset($_POST['artist_id']) || empty($_POST['artist_id'])) {
