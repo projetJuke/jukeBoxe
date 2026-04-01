@@ -5,7 +5,7 @@
     >
       <div
         class="relative h-full w-full"
-        :style="{ transform: `rotate(${vinylRotation}deg)` }"
+        :style="{ transform: `rotate(-${vinylRotation}deg)` }"
       >
         <img
           src="/images/vinyl.png"
@@ -30,6 +30,16 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 
+type PlayerTrack = {
+  code: string
+  album: string
+  artist: string
+  cover: string
+  src: string
+  idMusic: string
+  length: string
+}
+
 const isPlaying = ref(false)
 const vinylRotation = ref(0)
 const audio = ref<HTMLAudioElement | null>(null)
@@ -39,6 +49,19 @@ const waveform = useState('player-waveform', () => Array.from({ length: 24 }, ()
 const pauseRequest = useState('player-pause-request', () => 0)
 const trackRequestCode = useState('player-track-request-code', () => '')
 const trackRequestId = useState('player-track-request-id', () => 0)
+const trackRequestError = useState('player-track-request-error', () => '')
+const trackRequestSuccessId = useState('player-track-request-success-id', () => 0)
+const isChoicePopupOpen = useState('player-choice-popup-open', () => false)
+const returnToCarouselRequestId = useState('player-return-to-carousel-request-id', () => 0)
+const config = useRuntimeConfig()
+const playlistTracks = useState<Array<{
+  album: string
+  length: string
+  id_cover: string
+  id_music: string
+  track_code: string
+  name: string
+}>>('playlist-tracks', () => [])
 
 const maxSpeed = 45
 const transitionDuration = 1300
@@ -46,14 +69,14 @@ const waveformMinHeight = 8
 const waveformMaxHeight = 42
 const diskSwapDuration = 550
 
-const fallbackTrack = {
+const fallbackTrack: PlayerTrack = {
   code: 'A1',
+  album: 'Selection musique',
+  artist: 'Artiste',
   src: '/audio/1.mp3',
-  cover: '/images/1.jpg'
-}
-
-const trackMap: Record<string, typeof fallbackTrack> = {
-  A1: fallbackTrack
+  cover: '/images/1.jpg',
+  idMusic: '1.mp3',
+  length: '0'
 }
 
 let animationFrameId: number | null = null
@@ -64,7 +87,8 @@ let audioContext: AudioContext | null = null
 let analyser: AnalyserNode | null = null
 let sourceNode: MediaElementAudioSourceNode | null = null
 let frequencyData: Uint8Array | null = null
-const currentTrack = ref(fallbackTrack)
+let returnToCarouselTimeoutId: number | null = null
+const currentTrack = useState<PlayerTrack>('player-current-track', () => fallbackTrack)
 const diskStage = ref<'idle' | 'out' | 'in'>('idle')
 const isChangingTrack = ref(false)
 
@@ -76,6 +100,23 @@ function wait(ms: number) {
 
 function resetWaveform() {
   waveform.value = Array.from({ length: 24 }, () => 6)
+}
+
+function clearReturnToCarouselTimeout() {
+  if (returnToCarouselTimeoutId === null) {
+    return
+  }
+
+  window.clearTimeout(returnToCarouselTimeoutId)
+  returnToCarouselTimeoutId = null
+}
+
+function scheduleReturnToCarousel() {
+  clearReturnToCarouselTimeout()
+  returnToCarouselTimeoutId = window.setTimeout(() => {
+    returnToCarouselRequestId.value += 1
+    returnToCarouselTimeoutId = null
+  }, 60000)
 }
 
 function ensureAudioAnalyser() {
@@ -114,9 +155,14 @@ function handleAudioEnded() {
   targetSpeed = 0
   syncAudioState()
   resetWaveform()
+  scheduleReturnToCarousel()
 }
 
 function handleKey(e: KeyboardEvent) {
+  if (isChoicePopupOpen.value) {
+    return
+  }
+
   if (e.key.toLowerCase() === 'p') {
     togglePlayback()
   }
@@ -133,6 +179,7 @@ async function togglePlayback() {
   }
 
   try {
+    clearReturnToCarouselTimeout()
     ensureAudioAnalyser()
 
     if (audioContext?.state === 'suspended') {
@@ -158,19 +205,73 @@ function pausePlayback() {
   resetWaveform()
 }
 
-function loadTrack(trackCode: string) {
+function mapTrackToPlayerTrack(track: {
+  album: string
+  length: string
+  id_cover: string
+  id_music: string
+  track_code: string
+  name: string
+}): PlayerTrack {
+  return {
+    code: track.track_code,
+    album: track.album || 'Track sans album',
+    artist: track.name || 'Artiste inconnu',
+    cover: `/images/${track.id_cover || '1.jpg'}`,
+    src: `/audio/${track.id_music || '1.mp3'}`,
+    idMusic: track.id_music || '1.mp3',
+    length: track.length || '0'
+  }
+}
+
+async function fetchTrackByCode(trackCode: string): Promise<PlayerTrack | null> {
+  const apiBase = String(config.public.apiBase || '').replace(/\/$/, '')
+  const apiUrl = `${apiBase}/api/tracks/by-code`
+
+  try {
+    const response = await $fetch<{
+      track?: {
+        album: string
+        length: string
+        id_cover: string
+        id_music: string
+        track_code: string
+        name: string
+      }
+    }>(apiUrl, {
+      query: {
+        code: trackCode
+      }
+    })
+
+    if (!response.track) {
+      return null
+    }
+
+    return mapTrackToPlayerTrack(response.track)
+  } catch (error) {
+    console.error('Chargement track impossible', error)
+    return null
+  }
+}
+
+function getRequestedTrackFromPlaylist(trackCode: string): PlayerTrack | null {
+  const selectedTrack = playlistTracks.value.find((track) => track.track_code === trackCode)
+
+  if (!selectedTrack) {
+    return null
+  }
+
+  return mapTrackToPlayerTrack(selectedTrack)
+}
+
+function loadTrack(track: PlayerTrack) {
   if (!audio.value) {
     return
   }
 
-  const nextTrack = trackMap[trackCode] ?? {
-    code: trackCode,
-    src: fallbackTrack.src,
-    cover: fallbackTrack.cover
-  }
-
-  currentTrack.value = nextTrack
-  audio.value.src = nextTrack.src
+  currentTrack.value = track
+  audio.value.src = track.src
   audio.value.load()
   currentTime.value = 0
   duration.value = 0
@@ -182,6 +283,15 @@ async function runTrackChange(trackCode: string) {
     return
   }
 
+  const nextTrack = await fetchTrackByCode(trackCode) ?? getRequestedTrackFromPlaylist(trackCode)
+
+  if (!nextTrack) {
+    trackRequestError.value = 'Code introuvable.'
+    return
+  }
+
+  trackRequestError.value = ''
+  trackRequestSuccessId.value += 1
   isChangingTrack.value = true
   pausePlayback()
   await wait(transitionDuration)
@@ -189,7 +299,7 @@ async function runTrackChange(trackCode: string) {
   diskStage.value = 'out'
   await wait(diskSwapDuration)
 
-  loadTrack(trackCode)
+  loadTrack(nextTrack)
   diskStage.value = 'in'
   await wait(40)
   diskStage.value = 'idle'
@@ -234,7 +344,7 @@ function animateVinyl(timestamp: number) {
 }
 
 onMounted(() => {
-  audio.value = new Audio('/audio/1.mp3')
+  audio.value = new Audio(currentTrack.value.src)
   audio.value.addEventListener('timeupdate', syncAudioState)
   audio.value.addEventListener('loadedmetadata', syncAudioState)
   audio.value.addEventListener('durationchange', syncAudioState)
@@ -256,6 +366,7 @@ watch(trackRequestId, () => {
 })
 
 onUnmounted(() => {
+  clearReturnToCarouselTimeout()
   window.removeEventListener('keydown', handleKey)
 
   if (audio.value) {
@@ -298,7 +409,7 @@ onUnmounted(() => {
 }
 
 .disk-shell.in {
-  transform: translateY(185%) scale(0.m2);
+  transform: translateY(185%) scale(0.2);
   opacity: 0;
   filter: blur(3px);
 }
@@ -310,10 +421,10 @@ onUnmounted(() => {
 }
 
 .arm.lift {
-  transform: rotate(-28deg);
+  transform: rotate(-8deg);
 }
 
 .arm.play {
-  transform: rotate(85deg);
+  transform: rotate(23deg);
 }
 </style>

@@ -20,6 +20,9 @@
             <div class="bg-black h-[1px] w-full" />
           </div>
         </div>
+        <p class="mt-4 min-h-[20px] font-mulish text-[14px] font-semibold text-[#7a1414]">
+          {{ errorMessage }}
+        </p>
       </div>
     </section>
   </div>
@@ -29,6 +32,7 @@
 defineProps<{
   selectedLetter: string
   selectedNumber: string
+  errorMessage: string
 }>()
 </script>
 

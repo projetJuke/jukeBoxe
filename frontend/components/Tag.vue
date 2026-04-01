@@ -3,19 +3,19 @@
       class="card-juke w-full max-w-[400px] rounded-xl px-5 pt-6 pb-[36px] shadow-md shadow-black/10 xl:justify-self-start xl:h-[min(750px,calc(100dvh-4rem))]"
   >
     <img
-        src="/images/1.jpg"
-        alt="Theodora"
+        :src="currentTrack.cover"
+        :alt="currentTrack.album"
         class="mx-auto block aspect-[6/5] w-full max-w-[300px] rounded-xl object-cover shadow-md shadow-black/20"
     >
     <div class="flex flex-col items-center text-center">
       <h1 class="mt-9 font-arima text-4xl font-bold uppercase leading-tight text-black sm:text-5xl">
-        Theodora
+        {{ currentTrack.artist }}
       </h1>
       <p class="mt-3 font-mulish text-base text-black sm:text-lg">
-        Ils me rient tous au nez
+        {{ currentTrack.album }}
       </p>
       <p class="mt-6 font-arima text-4xl font-bold text-black sm:text-5xl">
-        A1
+        {{ currentTrack.code }}
       </p>
       <div class="mt-8 w-[300px]">
         <div class="relative mb-4 flex h-[150px] w-[300px] items-center justify-between rounded-[18px] bg-black/8 px-3 py-2">
@@ -46,9 +46,28 @@
   </section>
 </template>
 <script setup lang="ts">
+type PlayerTrack = {
+  code: string
+  album: string
+  artist: string
+  cover: string
+  src: string
+  idMusic: string
+  length: string
+}
+
 const currentTime = useState('player-current-time', () => 0)
 const duration = useState('player-duration', () => 0)
 const waveform = useState('player-waveform', () => Array.from({ length: 24 }, () => 6))
+const currentTrack = useState<PlayerTrack>('player-current-track', () => ({
+  code: 'A1',
+  album: 'Selection musique',
+  artist: 'Artiste',
+  cover: '/images/1.jpg',
+  src: '/audio/1.mp3',
+  idMusic: '1.mp3',
+  length: '0'
+}))
 
 const progressPercent = computed(() => {
   if (!duration.value) {
