@@ -1,6 +1,6 @@
 <?php 
 session_start();
-    include_once ""
+    include_once "../functions/get_playlist.php";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -10,14 +10,12 @@ session_start();
     <title>Modifier playlist</title>
 </head>
 <body>
-<body>
-    <h1> Modifier la playlist : <?= $playlist_name ?></h1>
-    <form action="../functions/modify_playlist.php" method="POST">
+    <h1> Modifier la playlist : <?= $playlist['label'] ?? "" ?></h1>
+    <form action="../functions/update_playlist.php" method="POST">
         <label for="">Nom de la playlist</label>
-        <input type="text" name="playlist_name" required> <br>
-        <input type="hidden" name="playlist_id" value="<?= $playlist_id ?>">
+        <input type="text" name="playlist_name" value="<?= $playlist['label'] ?? "" ?>" required> <br>
+        <input type="hidden" name="playlist_id" value="<?= $playlist['playlist_id'] ?? "" ?>">
         <button type="submit"> Valider </button>
     </form>
-</body>
 </body>
 </html>

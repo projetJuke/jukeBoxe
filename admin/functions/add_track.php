@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST") {
     exit();
 }
 
-if (!isset($_POST['playlist_id']) || !isset($_POST['id_morceau']) || (!isset($_POST['identifier']) && !empty($_POST['identifier']))) {
+if (!isset($_POST['playlist_id']) || !isset($_POST['id_morceau']) || (!isset($_POST['identifier']) || empty($_POST['identifier']))) {
     $_SESSION['error'] = "Playlist ou morceau non trouvée";
     header("Location: ../views/index.php");
     exit();
@@ -48,8 +48,34 @@ try {
 
 $row = $statement->fetch() ?? null;
 $statement->closeCursor();
+
 if ($row) {
     $_SESSION['error'] = "Le morceau existe déja dans la playlist";
+    header("Location: ../views/gestion_playlist.php?playlist_id=" . $playlist_id . "");
+    exit();
+}
+
+$sql_verify_identifier = "SELECT * FROM belong
+                          WHERE playlist_id = :playlist_id
+                          AND track_code = :track_code
+                          LIMIT 1";
+$statement = $pdo->prepare($sql_verify_identifier);
+$statement->bindParam("playlist_id", $playlist_id);
+$statement->bindParam("track_code", $track_code);
+
+try{
+    $statement->execute();
+} catch(Exception $e) {
+    $e->getMessage();
+    $_SESSION['error'] = "Erreur de connexion à la base de données";
+    header("Location: ../views/gestion_playlist.php?playlist_id=" . $playlist_id . "");
+    exit();
+}
+
+$row = $statement->fetch() ?? NULL;
+
+if ($row) {
+    $_SESSION['error'] = "L'identifiant " . $track_code . " est déjà utilisé dans la playlist";
     header("Location: ../views/gestion_playlist.php?playlist_id=" . $playlist_id . "");
     exit();
 }

@@ -26,7 +26,7 @@ $playlist_name = $_POST['playlist_name'];
 
 $sql_verify = "SELECT * FROM playlists
                WHERE playlist_id = :id";
-$statement = $pdo->prepare($sql);
+$statement = $pdo->prepare($sql_verify);
 $statement->bindParam("id", $playlist_id);
 
 try{
