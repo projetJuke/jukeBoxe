@@ -70,7 +70,9 @@ type Track = {
 const config = useRuntimeConfig()
 const apiUrl = `${config.public.apiBase}/api/tracks/all`
 
-const { data, pending, error } = await useFetch<{ tracks?: Track[] }>(apiUrl)
+const { data, pending, error } = await useFetch<{ tracks?: Track[] }>(apiUrl, {
+  server: false
+})
 const tracks = computed(() => data.value?.tracks ?? [])
 const isFastScrolling = ref(false)
 const firstRowOffset = ref(0)

@@ -50,7 +50,9 @@ const config = useRuntimeConfig()
 const apiUrl = `${config.public.apiBase}/api/tracks`
 const playlistTracks = useState<Track[]>('playlist-tracks', () => [])
 
-const { data, pending, error } = await useFetch<{ tracks?: Track[] }>(apiUrl)
+const { data, pending, error } = await useFetch<{ tracks?: Track[] }>(apiUrl, {
+  server: false
+})
 const tracks = computed(() => data.value?.tracks ?? [])
 
 watchEffect(() => {

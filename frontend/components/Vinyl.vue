@@ -5,7 +5,7 @@
     >
       <div
         class="relative h-full w-full"
-        :style="{ transform: `rotate(-${vinylRotation}deg)` }"
+        :style="{ transform: `rotate(${vinylRotation}deg)` }"
       >
         <img
           src="/images/vinyl.png"
