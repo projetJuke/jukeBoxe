@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once __DIR__ . "/../../connect.php";
-require_once __DIR__ . "/utilities.php";
+require_once "../../connect.php";
+require_once "utilities.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
     $_SESSION['popup'] = "Veuillez acceder à travers un formulaire à la page.";
@@ -26,14 +26,14 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 
 $sql = 'SELECT * FROM users WHERE name = :username';
-$statement = $db->prepare($sql);
+$statement = $pdo->prepare($sql);
 $statement->bindParam("username", $username);
 
 try {
     $statement->execute();
 } catch (Exception $e) {
-    $_SESSION['popup'] = "Erreur de connexion a la base ou requete invalide";
-    header("Location: ../views/index.php");
+    echo $e->getMessage();
+    header("Location: ../views/error.php");
     exit();
 }
 
